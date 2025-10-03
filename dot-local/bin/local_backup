@@ -27,7 +27,7 @@ CONFIG_DIRS=(
     "walker"
 )
 
-# ~/.local/ and ~/.local/share/
+# ~/.local/
 LOCAL_DIRS=(
     "bin"
     "share/applications"
@@ -90,17 +90,16 @@ else
     logger -t dotfiles_backup "WARNING: Wallpaper directory not found: $SOURCE_WALLPAPERS"
 fi
 
-# Git commit and push
+# Git add, commit and push
 cd "$DOTFILES_BASE" || exit
 
-# Add changed files
 git add .
 
 # Check if anything is staged for commit
 if ! git diff --cached --quiet; then
     COMMIT_MSG="Auto backup $(date '+%Y-%m-%d %H:%M:%S')"
     git commit -m "$COMMIT_MSG"
-    git push origin main
+    git push origin master
     logger -t dotfiles_backup "Committed and pushed changes to GitHub: $COMMIT_MSG"
 else
     logger -t dotfiles_backup "No changes to commit"
