@@ -2,7 +2,6 @@
 
 # Make a local backup of changed dotfiles
 # Commit and push to github repo
-# 
 #
 # jontas@gmx.com (2025)
 # SPDX-License-Identifier: MIT
@@ -62,18 +61,17 @@ copy_directories() {
     done
 }
 
-# copy a single files
+# copy single files
 copy_file() {
     local source_path=$1
     local destination=$2
 
     if [ -f "$source_path" ]; then
-        cp "$source_path" "$destination"
+        rsync -a "$source_path" "$destination"
     else
         logger -t dotfiles_backup "WARNING: File not found and skipped: $source_path"
     fi
 }
-
 
 # Begin execution
 ensure_directory "$CONFIG_DEST"
@@ -91,13 +89,13 @@ else
     logger -t dotfiles_backup "WARNING: Wallpaper directory not found: $SOURCE_WALLPAPERS"
 fi
 
-# Git commit och push
+# Git commit and push
 cd "$DOTFILES_BASE" || exit
 
-# Lägg till alla ändrade filer
+# Add changed files
 git add .
 
-# Kontrollera om något är staged för commit
+# Check if anything is staged for commit
 if ! git diff --cached --quiet; then
     COMMIT_MSG="Auto backup $(date '+%Y-%m-%d %H:%M:%S')"
     git commit -m "$COMMIT_MSG"
