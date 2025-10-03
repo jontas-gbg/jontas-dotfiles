@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+
+# This script fetches and formats weather data from wttr.in
+# - Uses 24-hour time format and meters per second (m/s) for wind speed.
+# - Location is specified by latitude and longitude.
+# 
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+import json
+import requests
+from datetime import datetime
+
+# wttr.in supports up to 4 decimal places for latitude and longitude
+LAT, LON = 57.6862, 12.1954
+WTTR_URL = f"https://wttr.in/{LAT},{LON}?format=j1"
+
+# Unicode icons for display
+ICONS = {
+    'temp': '\ue350',
+    'low': '\ue339',
+    'wind': '\ue34b',
+    'humidity': '\ue35d',
+    'sunrise': '\ue34c',
+    'sunset': '\ue34d'
+}
+
+# Mapping of wttr (WorldWeatherOnline API) weather codes to custom weather icons
+WEATHER_CODES = {
+    '113': ' ', '116': ' ', '119': ' ', '122': ' ', '143': ' ',
+    '176': ' ', '179': ' ', '182': ' ', '185': ' ', '200': ' ',
+    '227': ' ', '230': ' ', '248': ' ', '260': ' ', '263': ' ',
+    '266': ' ', '281': ' ', '284': ' ', '293': ' ', '296': ' ',
+    '299': ' ', '302': ' ', '305': ' ', '308': ' ', '311': ' ',
+    '314': ' ', '317': ' ', '320': ' ', '323': ' ', '326': ' ',
+    '329': ' ', '332': ' ', '335': ' ', '338': ' ', '350': ' ',
+    '353': ' ', '356': ' ', '359': ' ', '362': ' ', '365': ' ',
+    '368': ' ', '371': ' ', '374': ' ', '377': ' ', '386': ' ',
+    '389': ' ', '392': ' ', '395': ' '
+}
+
+# Fetch weather data from wttr.in
+weather = requests.get(WTTR_URL).json()
+current = weather['current_condition'][0]
+
+# Prepare output data structure
+data = {}
+tempint = int(current['FeelsLikeC'])
+
+# Display icon and temperature (with sign)
+data['text'] = f" <big>{WEATHER_CODES[current['weatherCode']]}</big> {tempint:+}°C"
+
+# Tooltip: current weather, wind speed converted to m/s
+windspeed_ms = round(int(current['windspeedKmph']) / 3.6)
+data['tooltip'] = (
+    f"Current: {current['weatherDesc'][0]['value']}\n"
+    f"{ICONS['temp']}\t{current['temp_C']}{ICONS['low']}\n"
+    f"{ICONS['wind']}\t{windspeed_ms} m/s\n"
+    f"{ICONS['humidity']}\t{current['humidity']}%\n"
+    f"{'━' * 18}"
+)
+
+# Tooltip: forecast for today and tomorrow
+# To include more days, adjust the slice [:2] below.
+for i, day in enumerate(weather['weather'][:2]):
+    title = "Today" if i == 0 else "Tomorrow"
+    data['tooltip'] += f"\n{title}\n"
+    
+    # Align columns for temperature values
+    max_temp = f"{day['maxtempC']:>2}"
+    min_temp = f"{day['mintempC']:>2}"
+    # Convert sunrise and sunset to 24-hour format
+    sunrise_24 = datetime.strptime(day['astronomy'][0]['sunrise'], "%I:%M %p").strftime("%H:%M")
+    sunset_24 = datetime.strptime(day['astronomy'][0]['sunset'], "%I:%M %p").strftime("%H:%M")
+
+    data['tooltip'] += (
+        f"{ICONS['temp']}  {max_temp}{ICONS['low']}  ({min_temp}{ICONS['low']})"
+        f"  |  {ICONS['sunrise']}   {sunrise_24}  |  {ICONS['sunset']}   {sunset_24}\n"
+    )
+
+# Output result as JSON
+print(json.dumps(data))
+
+

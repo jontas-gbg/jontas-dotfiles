@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+# Fast way to put Chaotic AUR to Pacman mirrorlist.
+#
+# jontas@gmx.com (2023, 2025)
+# SPDX-License-Identifier: MIT
+
+import os
+import subprocess
+import argparse
+import logging
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+
+# Color codes for terminal output
+colors = {
+    "yellow": "33",
+    "green": "32",
+    "red": "31"
+}
+
+def print_color(color, message):
+    """Print a colored message to the terminal."""
+    print(f"\033[{color}m{message}\033[0m")
+
+def main():
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Add Chaotic AUR to Pacman mirrorlist.")
+    parser.add_argument("--key-server", default="keyserver.ubuntu.com", help="PGP key server")
+    args = parser.parse_args()
+
+    # Constants
+    repo_name = "chaotic-aur"
+    repo_key = "3056513887B78AEB"
+    repo_url = "https://cdn-mirror.chaotic.cx/chaotic-aur/"
+
+    # Check if Chaotic AUR is already in pacman.conf
+    with open("/etc/pacman.conf", "r") as f:
+        if repo_name in f.read():
+            print_color(colors["yellow"], f"{repo_name} is already in /etc/pacman.conf")
+            return
+
+    # Check if running as root
+    if os.geteuid() != 0:
+        print_color(colors["red"], "This script must be run as root")
+        exit(1)
+
+    try:
+        # Retrieve and sign the PGP key
+        subprocess.run(["pacman-key", "--recv-key", repo_key, "--keyserver", args.key_server], check=True)
+        subprocess.run(["pacman-key", "--lsign-key", repo_key], check=True)
+
+        # Install keyring and mirrorlist
+        subprocess.run(["pacman", "-U", f"{repo_url}/chaotic-keyring.pkg.tar.zst", "--noconfirm"], check=True)
+        subprocess.run(["pacman", "-U", f"{repo_url}/chaotic-mirrorlist.pkg.tar.zst", "--noconfirm"], check=True)
+
+        # Add Chaotic AUR to pacman.conf
+        with open("/etc/pacman.conf", "a") as f:
+            f.write(f"\n[{repo_name}]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n")
+
+        print_color(colors["green"], f"{repo_name} has been added to /etc/pacman.conf")
+        logging.info("Chaotic AUR setup completed successfully.")
+
+    except subprocess.CalledProcessError as e:
+        print_color(colors["red"], f"An error occurred: {e}")
+        logging.error("Failed to complete the setup.")
+        exit(1)
+
+if __name__ == "__main__":
+    main()

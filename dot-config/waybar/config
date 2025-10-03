@@ -1,0 +1,28 @@
+{
+    "layer": "top",
+    "include": [
+        "~/.config/waybar/modules.jsonc",
+    ],
+
+    "modules-left": [
+        "custom/startmenu",
+        "hyprland/workspaces",
+        "custom/music",
+        "custom/pacman"
+    ],
+    "modules-center": [
+        "clock",
+        "custom/weather"
+    ],
+    "modules-right": [
+        "group/utils",
+        "custom/proc",
+        "memory",
+        "custom/keybinds",
+        "network",
+        "pulseaudio",
+        "bluetooth",
+        "custom/quit"
+      ],
+}
+

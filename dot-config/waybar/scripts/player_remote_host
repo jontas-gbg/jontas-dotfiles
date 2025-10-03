@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# Using ssh to connect to my media computer
+# Using passwordless connection to host.
+# It'll show up in waybar on local machine.
+#
+# jontas@gmx.com (2024)
+# SPDX-License-Identifier: MIT
+
+declare -A PLAYER_ICONS=(
+    ["mpv"]="󰐹"
+    ["kasts"]="󰦔"
+    ["vlc"]="󰕼"
+    ["spotube"]=""
+    ["spotify"]="󰓇"
+    ["strawberry"]="󰓃"
+    ["firefox"]=""
+    ["chrome"]=""
+    ["audacious"]="󰜟"
+    ["default"]=""
+)
+
+STREAMAPP=("mpv" "spotify" "audacious" "kasts")
+
+# IP or remote computer name (~/.ssh/config)
+REMOTE="mediaserver"
+
+ICON=""
+TEXT=""
+TOOLTIP=""
+PLAYER=""
+CLASS="${PLAYER:-default}"
+
+for PLAYER in "${STREAMAPP[@]}"; do
+    STATUS=$(ssh -o ConnectTimeout=1 "$REMOTE" "playerctl --player=$PLAYER status" 2>/dev/null)
+    if [[ $STATUS == "Playing" ]]; then
+        CLASS="${PLAYER:-default}"
+        ARTIST=$(ssh "$REMOTE" "playerctl --player=$PLAYER metadata --format '{{ artist }}'")
+        ALBUM=$(ssh "$REMOTE" "playerctl --player=$PLAYER metadata --format '{{ album }}'")
+        TITLE=$(ssh "$REMOTE" "playerctl --player=$PLAYER metadata --format '{{ title }}'")
+        
+        TEXT="$ARTIST - $TITLE"
+        TOOLTIP="󰗋\t$ARTIST\n󰓏\t$ALBUM\n\t$TITLE"
+        ICON="${PLAYER_ICONS[$PLAYER]:-${PLAYER_ICONS[default]}}"
+        break
+    fi
+done
+
+if [[ -z "$TEXT" ]]; then
+    TEXT="No music"
+    TOOLTIP="Silence..."
+    ICON="󰏥"
+    CLASS="stopped"
+fi
+
+echo "{\"text\": \"$ICON\", \"tooltip\": \"$TOOLTIP\", \"class\": \"$CLASS\"}"
+

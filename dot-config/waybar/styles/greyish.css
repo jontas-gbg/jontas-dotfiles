@@ -1,0 +1,14 @@
+@define-color background  #E0E0E0;
+@define-color light       #F8F8F8;
+@define-color hovering    #e6e6e6;
+@define-color dark        #1e1e1e;
+@define-color attention   #ad3131;
+@define-color updated     #1f8033;
+@define-color mp-spot     #1f8033;
+@define-color ws-bg       #dbdbdb;
+@define-color ws-active   #c7c7c7;
+@define-color ws-border   #ababab;
+@define-color mod-border  #616161;
+@define-color blinking    #ad8031;
+@define-color popout      #f5f5f5;
+@define-color popouth     #e3f1ff;

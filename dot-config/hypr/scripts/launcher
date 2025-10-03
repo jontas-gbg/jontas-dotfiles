@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# STYLE=~/.config/wofi/jdst.css
+
+# wofi --show=drun --style="$STYLE"
+rofi -show drun

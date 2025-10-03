@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Set MAC address to a Bluetooth unit
+# Toggle connect/disconnect according to status
+# 
+# jontas@gmx.com (2023)
+# SPDX-License-Identifier: MIT
+
+# MAC address to bluetooth unit
+DEVICE_ADDRESS="90:56:82:01:4E:EA"
+
+if bluetoothctl info "$DEVICE_ADDRESS" | grep -q "Connected: yes"; then
+    bluetoothctl disconnect "$DEVICE_ADDRESS"
+else
+    bluetoothctl connect "$DEVICE_ADDRESS"
+fi

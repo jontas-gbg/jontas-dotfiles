@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+# This script is extremely situational, just for my very own needs.
+# You'd better find a better solution somewhere. Or spend some time tweaking this.
+#
+# jontas@gmx.com (2024)
+# SPDX-License-Identifier: MIT
+
+declare -A PLAYER_ICONS=(
+    ["mpv"]="󰐹"
+    ["kasts"]="󰦔"
+    ["vlc"]="󰕼"
+    ["spotube"]=""
+    ["spotify"]="󰓇"
+    ["strawberry"]="󰓃"
+    ["firefox"]=""
+    ["chrome"]=""
+    ["audacious"]="󰜟"
+    ["default"]=""
+)
+
+RADIO="mpv"
+STREAMAPP=("vlc" "spotube" "spotify" "audacious")
+POD="kasts"
+
+RADIO_STATUS=$(playerctl --player="$RADIO" status 2>/dev/null)
+POD_STATUS=$(playerctl --player="$POD" status 2>/dev/null)
+
+ICON=""
+TEXT=""
+TOOLTIP=""
+PLAYER=""
+CLASS="${PLAYER:-default}"
+
+if [[ $RADIO_STATUS == "Playing" ]]; then
+    PLAYER=$RADIO
+    CLASS="${PLAYER:-default}"
+    TITLE=$(playerctl metadata --player=$RADIO --format '{{ title }}' 2>/dev/null)
+    ARTIST=$(playerctl metadata --player=$RADIO --format '{{ artist }}' 2>/dev/null)
+    ALBUM=$(playerctl metadata --player=$RADIO --format '{{ album }}' 2>/dev/null)
+    if [[ -n "$ARTIST" && -n "$ALBUM" ]]; then
+        TEXT="$ARTIST - $TITLE"
+        TOOLTIP="$ARTIST\n$ALBUM\n$TITLE"
+        ICON="${PLAYER_ICONS[$RADIO]:-${PLAYER_ICONS[default]}}"
+    elif [[ "$TITLE" == "p1-aac-192" ]]; then
+        TEXT="Sveriges Radio P1"
+        TOOLTIP="Sveriges Radio P1"
+        ICON="${PLAYER_ICONS[$RADIO]:-${PLAYER_ICONS[default]}}"
+    else
+        DISPLAY_TEXT=$(playerctl metadata --player=$RADIO --format '{{ title }}' | awk '{sub(/.*spelar nu: /, ""); print}')
+        TEXT="$DISPLAY_TEXT"
+        TOOLTIP="$DISPLAY_TEXT"
+        ICON="${PLAYER_ICONS[$RADIO]:-${PLAYER_ICONS[default]}}"
+    fi
+elif [[ $POD_STATUS == "Playing" ]]; then
+    PLAYER=$POD
+    CLASS="${PLAYER:-default}"
+    ARTIST=$(playerctl metadata --player=$POD --format '{{ artist }}')
+    ALBUM=$(playerctl metadata --player=$POD --format '{{ album }}')
+    TITLE=$(playerctl metadata --player=$POD --format '{{ title }}' | sed 's/^[0-9]\+\([.:]\)\s*//')
+    TEXT="$ALBUM - $TITLE"
+    TOOLTIP="\t$ARTIST\n\t$ALBUM\n\t$TITLE"
+    ICON="${PLAYER_ICONS[$POD]}"
+else
+    for PLAYER_RAW in $(playerctl --list-all); do
+        if [[ "$PLAYER_RAW" == brave* ]]; then
+            STATUS=$(playerctl --player="$PLAYER_RAW" status 2>/dev/null)
+            if [[ $STATUS == "Playing" ]]; then
+                CLASS="brave"
+                ARTIST=$(playerctl metadata --player="$PLAYER_RAW" --format '{{ artist }}')
+                ALBUM=$(playerctl metadata --player="$PLAYER_RAW" --format '{{ album }}')
+                TITLE=$(playerctl metadata --player="$PLAYER_RAW" --format '{{ title }}')
+
+                TEXT="$ARTIST - $TITLE"
+                TOOLTIP="󰗋\t$ARTIST\n󰓏\t$ALBUM\n\t$TITLE"
+                ICON="${PLAYER_ICONS[brave]:-${PLAYER_ICONS[default]}}"
+                break
+            fi
+        fi
+    done
+    for PLAYER in "${STREAMAPP[@]}"; do
+        STATUS=$(playerctl --player="$PLAYER" status 2>/dev/null)
+        if [[ $STATUS == "Playing" ]]; then
+            CLASS="${PLAYER:-default}"
+            ARTIST=$(playerctl metadata --player=$PLAYER --format '{{ artist }}')
+            ALBUM=$(playerctl metadata --player=$PLAYER --format '{{ album }}')
+            TITLE=$(playerctl metadata --player=$PLAYER --format '{{ title }}')
+            TEXT="$ARTIST - $TITLE"
+            TOOLTIP="󰗋\t$ARTIST\n󰓏\t$ALBUM\n\t$TITLE"
+            ICON="${PLAYER_ICONS[$PLAYER]:-${PLAYER_ICONS[default]}}"
+            break
+        fi
+    done
+fi
+
+# Nothing plays
+if [[ -z "$TEXT" ]]; then
+    TEXT="No music"
+    TOOLTIP="Silence..."
+    ICON="󰏥"
+    CLASS="stopped"
+fi
+
+echo "{\"text\": \"$ICON\", \"tooltip\": \"$TOOLTIP\", \"class\": \"$CLASS\"}"
+

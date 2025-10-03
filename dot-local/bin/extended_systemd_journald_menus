@@ -1,0 +1,189 @@
+#!/usr/bin/env bash
+
+#
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT#
+
+UNKNOWN_CHOISE="Unknown choise. Try again"
+HIT_ENTER="Hit Enter to continue..."
+DO_SOMETHING="Do something:"
+
+
+print_color() {
+  local color=$1
+  local message=$2
+  printf "\033[1;${color}m$message\033[22m\033[0m\n"
+}
+
+# echo "\033[1;36mTEXTEN\033[0m\n"
+
+systemctl_status_menu() {
+    while true; do
+        clear
+        print_color "36" "Systemctl service status:"
+        echo "1. Google Drive Ocamlfus"
+        echo "2. Backup Wikis, tarball to Google Drive"
+        echo "3. Clean old Google Drive backups"
+        echo "4. rsync Zim Wiki to Google Drive"
+        echo ""
+        print_color "32" "B. Back"
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "$DO_SOMETHING " choice
+
+        case $choice in
+            1) systemctl --user status google-drive-ocamlfuse.service ;;
+            2) systemctl --user status backup-wikis.service ;;
+            3) systemctl --user status clean-gdrive-backups.service ;;
+            4) systemctl --user status zim-sync.service ;;
+            b|B) break ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+        read -p "$HIT_ENTER"
+    done
+}
+
+systemctl_misc_menu() {
+    while true; do
+        clear
+        print_color "36" "Systemctl misc"
+        echo "1. Show  user timers"
+        echo "2. Show running services"
+        echo "3. Show failed services"
+        echo "4. Show enabled units"
+        echo ""
+        print_color "32" "B. Back"
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "Do something: " choice
+
+        case $choice in
+            1) systemctl --user list-timers ;;
+            2) systemctl --user --type=service --state=running ;;
+            3) systemctl --user --type=service --state=failed ;;
+            4) systemctl --user list-unit-files --state=enabled ;;
+            b|B) break ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+        read -p "$HIT_ENTER"
+    done
+}
+
+systemctl_restart_menu() {
+    while true; do
+        clear
+        print_color "36" "Do systemd stuff"
+        echo "1. Reload user daemons"
+        echo "2. Restart Gdrive Ocamlfuse service"
+        echo "3. Restart Backup Wikis service"
+        echo "4. Restart rsync Zim Wikis service"
+        echo ""
+        print_color "32" "B. Back"
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "$DO_SOMETHING " choice
+
+        case $choice in
+            1) systemctl --user daemon-reload ;;
+            2) systemctl --user restart google-drive-ocamlfuse.service ;;
+            3) systemctl --user restart backup-wikis.service ;;
+            4) systemctl --user restart zim-sync.service ;;
+            b|B) break ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+        read -p "$HIT_ENTER"
+    done
+}
+
+check_logs_menu() {
+    while true; do
+        clear
+        print_color "36" "Check journald logs"
+        echo "1. Since last boot"
+        echo "2. Known reboots"
+        echo "3. Today GDrive ocamlfuse entries"
+        echo "4. Today Zim Wikis entries"
+        echo "5. Today Zim Sync entries"
+        echo "6. This months Clean GDrive entries"
+        echo "7. Journalctl --dmesg"
+        echo "8. Zim synk logs"
+        echo ""
+        print_color "32" "B. Back"
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "$DO_SOMETHING " choice
+
+        case $choice in
+            1) journalctl -b -r ;;
+            2) journalctl --list-boots -r ;;
+            3) journalctl -u -r google-drive-ocamlfuse.service --since today ;;
+            4) journalctl -u -r backup-wikis.service --since today ;;
+            5) journalctl -u -r zim-sync.service --since today ;;
+            6) journalctl -u -r clean-gdrive-backups.service --since "30 days ago" ;;
+            7) journalctl --dmesg -r ;;
+            8) tac ~/.local/share/log/zim_sync.log | bat ;;
+            b|B) break ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+        read -p "$HIT_ENTER"
+    done
+}
+
+miscellaneous_menu() {
+    while true; do
+        clear
+        print_color "36" "Misc tools"
+        echo "1. timedatectl status"
+        echo ""
+        print_color "32" "B. Back"
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "$DO_SOMETHING " choice
+
+        case $choice in
+            1) timedatectl status ;;
+            b|B) break ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+        read -p "$HIT_ENTER"
+    done
+}
+
+# printf "\033[0;1;30;37mAccess systemd and journald functions\033[22m\033[0m\n"
+
+# printf "\033[1;${color}m$message\033[22m\033[0m\n"
+
+main_menu() {
+    while true; do
+        clear
+        # print_color "36" "Access systemd and journald functions"
+        printf "\x1b[0;1;37;30mAccess systemd and journald functions\033[22m\033[0m\n"
+        echo "1. Systemctl status"
+        echo "2. Systemctl misc"
+        echo "3. Restart services"
+        echo "4. View logs"
+        echo "5. Misc tools"
+        echo ""
+        print_color "33" "Q. Quit"
+        echo ""
+        read -p "$DO_SOMETHING " choice
+
+        case $choice in
+            1) systemctl_status_menu ;;
+            2) systemctl_misc_menu ;;
+            3) systemctl_restart_menu ;;
+            4) check_logs_menu ;;
+            5) miscellaneous_menu ;;
+            q|Q) echo "Quit"; exit 0 ;;
+            *) echo "$UNKNOWN_CHOISE" ;;
+        esac
+    done
+}
+
+main_menu

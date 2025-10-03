@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# Keep a fresh copy of important dotfiles
+# Runs from systed daily and later syncs with github
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+
+# Use full paths instead of ~ for better robustness in systemd environments
+USER_HOME="/home/$(whoami)"
+DOTFILES_BASE="$USER_HOME/Documents/dotfiles"
+
+# Destination dirs
+CONFIG_DEST="$DOTFILES_BASE/dot-config"
+LOCAL_DEST="$DOTFILES_BASE/dot-local"
+WALLPAPERS_DEST="$DOTFILES_BASE/wallpapers"
+
+# ~/.config/
+CONFIG_DIRS=(
+    "hypr"
+    "elephant"
+    "foot"
+    "alacritty"
+    "fish"
+    "waybar"
+    "walker"
+)
+
+# ~/.local/ and ~/.local/share/
+LOCAL_DIRS=(
+    "bin"
+    "share/applications"
+    "share/fastfetch"
+)
+
+
+# Ensure the destination dirs exists and use logger for journald report
+ensure_directory() {
+    if [ ! -d "$1" ]; then
+        logger -t dotfiles_backup "Creating new destination directory: $1"
+        mkdir -p "$1"
+    fi
+}
+
+# rsync with -a flag for incremental copying in archive mode
+copy_directories() {
+    local source_base=$1
+    local destination=$2
+    shift 2
+    local dirs=("$@")
+
+    for dir in "${dirs[@]}"; do
+        SOURCE_PATH="$source_base/$dir"
+        
+        if [ -d "$SOURCE_PATH" ]; then
+            rsync -a "$SOURCE_PATH" "$destination"
+        else
+            logger -t dotfiles_backup "WARNING: Directory not found and skipped: $SOURCE_PATH"
+        fi
+    done
+}
+
+# copy a single files
+copy_file() {
+    local source_path=$1
+    local destination=$2
+
+    if [ -f "$source_path" ]; then
+        cp "$source_path" "$destination"
+    else
+        logger -t dotfiles_backup "WARNING: File not found and skipped: $source_path"
+    fi
+}
+
+
+# Begin execution
+ensure_directory "$CONFIG_DEST"
+ensure_directory "$LOCAL_DEST"
+ensure_directory "$WALLPAPERS_DEST"
+
+copy_directories "$USER_HOME/.config" "$CONFIG_DEST" "${CONFIG_DIRS[@]}"
+copy_file "$USER_HOME/.config/brave-flags.conf" "$CONFIG_DEST"
+copy_directories "$USER_HOME/.local" "$LOCAL_DEST" "${LOCAL_DIRS[@]}"
+
+SOURCE_WALLPAPERS="$USER_HOME/Pictures/wallpapers/"
+if [ -d "$SOURCE_WALLPAPERS" ]; then
+    rsync -a "$SOURCE_WALLPAPERS" "$WALLPAPERS_DEST"
+else
+    logger -t dotfiles_backup "WARNING: Wallpaper directory not found: $SOURCE_WALLPAPERS"
+fi
+

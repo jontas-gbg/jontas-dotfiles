@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+yad --width=400 --height=200 \
+--center \
+--title="Calendar" \
+--no-buttons \
+yad \
+           --calendar

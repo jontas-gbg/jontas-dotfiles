@@ -1,0 +1,27 @@
+[[entries]]
+name = "Perplexity"
+default = true
+url = "https://www.perplexity.ai/search/?q=%TERM%"
+icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
+prefix = "pp: "
+
+[[entries]]
+name = "Grok"
+default = false
+url = "https://x.com/i/grok?text=%TERM%"
+icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
+prefix = "gr: "
+
+[[entries]]
+name = "Arch Wiki"
+default = false
+url = "https://wiki.archlinux.org/index.php?search=%TERM%"
+icon = "/home/jontas/.local/share/icons/system/arch.svg"
+prefix = "aw: "
+
+[[entries]]
+name = "Svenska wikipedia"
+default = false
+url = "https://sv.wikipedia.org/w/index.php?search=%TERM%"
+icon = "/home/jontas/.local/share/icons/misc/wikipedia.png"
+prefix = "sv: "

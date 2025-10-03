@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Find the PID of the active window using hyprctl.
+# If a PID is found, send SIGTERM to allow graceful exit.
+# Wait briefly to allow cleanup.
+# If the process is still running, send SIGKILL to force termination.
+#
+# jontas@gmx.com (2023, 2025)
+# SPDX-License-Identifier: MIT
+
+pid=$(hyprctl activewindow | awk '/pid:/ {print $2}')
+
+if [ -n "$pid" ]; then
+  kill -TERM "$pid"
+  sleep 0.5
+  if kill -0 "$pid" 2>/dev/null; then
+    kill -KILL "$pid"
+  fi
+fi
+

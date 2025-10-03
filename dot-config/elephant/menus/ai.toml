@@ -1,0 +1,35 @@
+name = "ai"
+name_pretty = "AI"
+icon = "/home/jontas/.local/share/icons/ai/ai-generic.png"
+global_search = false
+
+[[entries]]
+text = "ChatGPT"
+icon = "/home/jontas/.local/share/icons/ai/chatgpt-ai.svg"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://chatgpt.com/"
+
+[[entries]]
+text = "Gemini"
+icon = "/home/jontas/.local/share/icons/ai/gemini-ai.svg"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://gemini.google.com/app"
+
+[[entries]]
+text = "Grok"
+icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://grok.com/"
+
+[[entries]]
+text = "Grok Tasks"
+icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://grok.com/tasks"
+
+
+[[entries]]
+text = "Claude"
+icon = "/home/jontas/.local/share/icons/ai/claude-ai.png"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://claude.ai/new"
+
+[[entries]]
+text = "Perplexity"
+icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
+action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=https://www.perplexity.ai/"

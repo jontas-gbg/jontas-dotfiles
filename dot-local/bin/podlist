@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Generate a daily list podcasts auto moved 
+# from phone to fileserver with FolderSync.
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+find ~/Podcasts -type f -name "*.mp3" -printf '%T@ %Tc %P\n' | sort -nr | awk '{$1=""; print substr($0,2)}' > ~/Documents/new-podcasts.txt
+

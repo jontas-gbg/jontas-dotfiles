@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+a=$(pidof hypridle)
+if [[ $a ]]
+then
+    killall -9 hypridle
+    notify-send "Idle inhibitor activated"
+else
+    notify-send "Idle inhibitor deactivated"
+    hypridle &> /dev/null
+fi

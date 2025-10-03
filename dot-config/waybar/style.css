@@ -1,0 +1,189 @@
+@import url("./styles/greyish.css");
+
+* {
+    font-family: "42dot Sans", "JetBrainsMono Nerd Font";
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 9px;
+}
+
+#waybar {
+    background: transparent;
+    border-radius: 13px;
+    opacity: 0.9;
+}
+
+.module {
+    padding: 0 10px;
+    margin: 3px;
+    /* border-radius: 13px; */
+    border: 1px solid @mod-border;
+}
+
+.module:active {
+    background-color: @background;
+}
+.module:hover {
+    background-color: #ffffff;
+}
+
+#workspaces {
+    background-color: @background;
+    margin: 3px;
+}
+
+#workspaces button {
+    color: @dark;
+    background-color: @ws-bg;
+    border: 1px solid @ws-border;
+    /*  box-shadow: none; */
+    margin: 2px 2px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+#workspaces button.active {
+    background: linear-gradient(to bottom, #ffffff, #e1c0f2); /* #c0d9f2  */
+    border: 1px solid #66aaff;
+    color: #003366;
+}
+
+#workspaces button:hover {
+    background: linear-gradient(to bottom, #d9ecff, #a9cfff);
+    color: #460066; /* #003366 */
+}
+#window {
+    margin: 3px;
+    color: @dark;
+    background-color: @background;
+}
+
+window#waybar.empty #window {
+    background-color: transparent;
+}
+
+#pulseaudio,
+#network,
+#bluetooth,
+#memory,
+#clock,
+#tray,
+#custom-music,
+#custom-pacman,
+#custom-weather,
+#custom-wallpaper,
+#custom-startmenu,
+#custom-quit,
+#custom-proc,
+#custom-keybinds {
+    margin: 3px;
+    color: @dark;
+    background: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    border: 1px solid @mod-border;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15);
+}
+
+#custom-pacman,
+#custom-music,
+#custom-startmenu {
+    font-size: 18px;
+}
+
+#tray {
+    font-size: 18px;
+    padding: 0 12px 0 11px;
+}
+#custom-startmenu {
+    padding: 0 12px 0 11px;
+}
+#custom-wallpaper,
+#memory {
+    padding: 0 17px 0 12px;
+}
+#bluetooth {
+    padding: 0 14px 0 13px;
+}
+
+#custom-keybinds,
+#custom-proc {
+    padding: 0 16px 0 10px;
+}
+
+#custom-music.kasts {
+    color: #5690cc;
+}
+#custom-music.spotify {
+    color: #1db954;
+}
+#custom-music.mpv {
+    color: #520053;
+}
+#custom-music.spotube {
+    color: #5690cc;
+}
+#custom-music.vlc {
+    color: #1db954;
+}
+#custom-music.audacious {
+    color: #520053;
+}
+
+@keyframes updates_ready {
+    to {
+        color: @blinking;
+    }
+}
+
+#custom-pacman.has-updates {
+    padding: 0 15px 0 12px;
+    color: @attention;
+    animation-name: updates_ready;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+#custom-pacman.updated {
+    padding: 0 15px 0 12px;
+    color: @updated;
+}
+
+#custom-screenshot,
+#custom-cliphist,
+#custom-color,
+#custom-reboot,
+#custom-lock,
+#custom-sleep {
+    padding: 0 16px 0 12px;
+    border-color: transparent;
+}
+
+#custom-cliphist,
+#custom-color,
+#custom-screenshot {
+    color: @popout;
+}
+
+#custom-screenshot:hover,
+#custom-cliphist:hover,
+#custom-color:hover {
+    color: @popouth;
+    padding: 0 16px 0 12px;
+    border-color: transparent;
+    background-color: transparent;
+    border: 1px solid @popouth;
+}
+#custom-quit {
+    padding: 0 16px 0 12px;
+}
+#custom-music {
+    padding: 0 14px 0 10px;
+}
+#network {
+    padding: 0 18px 0 9px;
+}
+
+tooltip {
+    color: @hilight;
+    background: rgba(43, 48, 59, 0.7);
+    border: 1px solid rgba(100, 114, 125, 0.5);
+    border-radius: 15px;
+}

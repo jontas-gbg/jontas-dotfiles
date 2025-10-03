@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+LOCAL_WEATHER=$(curl -s "https://wttr.in/Landvetter?M&T&F&lang=sv")
+LOCAL_DATE=$(date +%T)
+HTML_TEMPLATE="/home/$USER/.cache/local_weather.html"
+
+if [[ ! -f $HTML_TEMPLATE ]]; then
+  touch "$HTML_TEMPLATE" &&
+  echo "<html><body><pre></pre></body></html>" > "$HTML_TEMPLATE"
+fi 
+
+awk -v new_content="$LOCAL_DATE $LOCAL_WEATHER" '{
+  gsub(/<pre>.*<\/pre>/, "<pre>" new_content "</pre>");
+  print;
+}' "$HTML_TEMPLATE" > /tmp/local_weather.tmp && mv /tmp/local_weather.tmp "$HTML_TEMPLATE"

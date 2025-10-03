@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+declare -A sr_urls
+sr_urls[1]="https://http-live.sr.se/p1-aac-192"
+sr_urls[2]="https://live1.sr.se/p2-flac"
+sr_urls[3]="https://http-live.sr.se/p3-aac-192"
+sr_urls[4]="https://live1.sr.se/p4gbg-aac-320"
+sr_urls[5]="https://live1.sr.se/p4plus-aac-320"
+sr_urls[6]="https://http-live.sr.se/ekotsanderdirekt-aac-192"
+
+declare -A sr_stations
+sr_stations[1]="Sveriges Radio P1"
+sr_stations[2]="Sveriges Radio P2"
+sr_stations[3]="Sveriges Radio P3"
+sr_stations[4]="Sveriges Radio P4"
+sr_stations[5]="Sveriges Radio P4 Plus"
+sr_stations[6]="Ekot direkt!"
+
+declare -A color_codes
+color_codes[red]=31
+color_codes[green]=32
+color_codes[yellow]=33
+
+print_color() {
+  local color_name=$1
+  local message=$2
+  printf "\033[1;${color_codes[$color_name]}m${message}\033[0m\n"
+}
+
+kill_players() {
+  for player in mpv shortwave vlc; do
+    if pgrep -f "$player" >/dev/null; then
+      if ! pkill "$player"; then
+        print_color "31" "Failed to kill $player process"
+      fi
+    fi
+  done
+}
+
+print_available_options() {
+  options=$(echo ${!sr_urls[@]} | tr ' ' '\n' | sort -n | tr '\n' ' ')
+  echo -e "Available options: $options"
+  echo "Type 'sr h' for a channel list"
+}
+
+play_station() {
+  local station_index=$1
+  if [[ ${sr_urls[$station_index]} ]]; then
+    print_color "green" "Playing ${sr_stations[$station_index]}"
+    if [[ "$station_index" == "2" || "$station_index" == "7" ]]; then
+      mpv "${sr_urls[$station_index]}" | stdbuf -oL awk -F ': ' '/icy-title/ {print $3}' > /tmp/icy-title-p2 &
+    elif [[ "$station_index" == "5" ]]; then
+      mpv "${sr_urls[$station_index]}" | stdbuf -oL awk -F ': ' '/icy-title/ {print $4}' > /tmp/icy-title-p4plus &
+    else
+      mpv "${sr_urls[$station_index]}" &>/dev/null &
+    fi
+
+    if ! pgrep -f "mpv .*${sr_urls[$station_index]}" >/dev/null; then
+      print_color "red" "Failed to start mpv"
+      exit 1
+    fi
+  fi
+}
+
+
+# Main logic
+if [ "$1" == "q" ]; then
+  print_color "green" "\t*poff*"
+  kill_players
+elif [ "$1" == "h" ]; then
+  clear
+  cat ~/.local/share/help-files/sr-script-help
+elif [ $# -ne 1 ] || [[ ! ${sr_urls[$1]} ]]; then
+  print_color "yellow" "Invalid usage or station index"
+  print_available_options
+  exit 1
+else
+  kill_players
+  play_station "$1"
+fi

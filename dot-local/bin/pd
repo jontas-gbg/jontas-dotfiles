@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+#
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+import os
+import tarfile
+import shutil
+from datetime import datetime
+from pathlib import Path
+
+# Definiera kataloger och filnamn
+home = Path.home()
+backup_dir = home / ".cache/tmp_bak"
+backup_file = f"DOTFILES-{datetime.now():%Y-%m-%d-%H-%M}.tar.gz"
+end_dir = home / "Documents/Backups"
+remote_dir = home / "Onedrive/Arch_backup/Tarballs"
+
+# Skapa temporär backup-katalog
+backup_dir.mkdir(parents=True, exist_ok=True)
+
+# Specifika filer och kataloger att inkludera i backupen
+files_to_backup = [
+    home / ".zshrc",
+    home / ".zshenv",
+    home / ".zsh"
+]
+
+# Skapa tar-filen
+backup_path = backup_dir / backup_file
+with tarfile.open(backup_path, "w:gz") as tar:
+    for file_path in files_to_backup:
+        tar.add(file_path, arcname=file_path.relative_to(home))
+
+# Flytta tar-filen till den slutliga destinationen och kopiera till remote-katalogen
+end_dir.mkdir(parents=True, exist_ok=True)
+shutil.move(str(backup_path), str(end_dir / backup_file))
+shutil.copy(str(end_dir / backup_file), str(remote_dir))
+
+# Ta bort temporära katalogen
+shutil.rmtree(backup_dir)

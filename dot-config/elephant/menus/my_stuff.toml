@@ -1,0 +1,27 @@
+name = "my_stuff"
+name_pretty = "My stuff"
+icon = "explore2-symbolic"
+global_search = true
+
+[[entries]]
+text = "0. Mozilla e-mail forwarder"
+async = """echo "auj9jfxgo@mozmail.com""""
+icon = "mail-app-symbolic"
+action = "wl-copy '%RESULT%'"
+
+[[entries]]
+text = "1. Proton e-mail forwarder"
+async = """echo "huggingface.exhale804@passinbox.com""""
+icon = "mail-app-symbolic"
+action = "wl-copy '%RESULT%'"
+
+[[entries]]
+text = "2. My coords"
+async = """echo "Lat, Lon, M ö h: 57.686206, 12.19538, 63m""""
+icon = "map-marker-symbolic"
+action = "wl-copy '%RESULT%'"
+
+[[entries]]
+text = "3. Weather"
+icon = "org.gnome.Weather.Application-symbolic"
+async = """cat ~/.cache/wtr.txt"""

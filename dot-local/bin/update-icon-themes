@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for dir in /usr/share/icons/*/ ; do
+    gtk-update-icon-cache -f "$dir"
+done

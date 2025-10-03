@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Gracefully terminate waybar process using SIGTERM.
+# If process remain, forcefully kill it with SIGKILL.
+# Restart waybar in the background and reload Hyprpaper.
+#
+# jontas@gmx.com (2023, 2025)
+# SPDX-License-Identifier: MIT
+
+pkill waybar
+sleep 0.5
+pgrep -x waybar && pkill -KILL waybar
+
+nohup waybar > /dev/null 2>&1 &
+hyprctl reload
+hyprctl hyprpaper reload ,"~/Pictures/snowy-peace.png"
+

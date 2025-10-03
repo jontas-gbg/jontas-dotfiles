@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+USER_CONF="$HOME/.config/fish/config.fish"
+CACHY_CONF="/usr/share/cachyos-fish-config/cachyos-config.fish"
+
+echo "Compare CachyOS config with my own"
+diff -u "$CACHY_CONF" "$USER_CONF" | less
+

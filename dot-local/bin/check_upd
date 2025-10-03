@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+#
+# jontas@gmx.com (2017, 2025)
+# SPDX-License-Identifier: MIT
+
+print_color() {
+  local color=$1
+  local message=$2
+  printf "\033[1;${color}m$message\033[0m\n"
+}
+
+clear
+print_color "33" "Checking..."
+
+check_new_updates() {
+  local updates_count=$(checkupdates-with-aur | wc -l)
+
+  if [[ "${updates_count}" -eq 0 ]]; then
+    clear
+    print_color "36" "----------------------------------------"
+    print_color "37" " There are no updates                   "
+    print_color "37" " Check back later.                      "
+    print_color "36" "----------------------------------------"
+  else
+    clear
+    print_color "32" "----------------------------------------"
+    print_color "32" " There are ${updates_count} new updates."
+    print_color "32" " Here we go...                          "
+    print_color "32" "----------------------------------------"
+    sudo pacman -Syu --noconfirm &&
+    yay -Sua --noconfirm &&
+    polybar-msg cmd restart
+  fi
+}
+
+check_new_updates
+
+
+
+

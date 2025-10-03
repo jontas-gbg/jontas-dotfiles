@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+# Backup script for use with a systemd timer and runs every day
+# Make a compressed tarball then save one local copy and move
+# one copy to OneDrive
+#
+# jontas@gmx.com (2024, 2025)
+# SPDX-License-Identifier: MIT
+#
+
+from datetime import datetime
+import os
+import shutil
+import tarfile
+import tempfile
+from pathlib import Path
+
+backup_dir = Path.home() / ".cache" / "tmp_bak"
+backup_dir.mkdir(parents=True, exist_ok=True)
+
+backup_file = f"backup-{datetime.now().strftime('%Y-%m-%d-%H-%M')}.tar.gz"
+end_dir = Path.home() / "Documents" / "Backups"
+end_dir.mkdir(parents=True, exist_ok=True)
+
+remote_dir = Path.home() / "Public" / "baks" / "Tarballs"
+
+# Lägg till filerna till backup listan
+backup_directories = [
+    Path.home() / ".zshrc",
+    Path.home() / ".zshenv",
+    Path.home() / ".zsh",
+    Path.home() / ".local" / "bin",
+    Path.home() / ".local" / "share" / "fonts",
+    Path.home() / ".config" / "conky",
+    Path.home() / ".config" / "ansiweather",
+    Path.home() / ".config" / "zim",
+    Path.home() / "Documents" / "AF",
+    Path.home() / "Documents" / "Script",
+    Path.home() / "Documents" / "Betyg",
+    Path.home() / "Documents" / "Kurser",
+    Path.home() / "Documents" / "Obsidian Vault",
+]
+
+def create_tarball(source_dir, dest_file):
+    with tarfile.open(dest_file, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+def clean_up_temps(*dirs):
+    for dir in dirs:
+        shutil.rmtree(dir, ignore_errors=True)
+
+def copy_to_remote(src_file, remote_path):
+    shutil.copy2(src_file, remote_path)
+
+with tempfile.TemporaryDirectory() as temp_dir:
+    temp_path = Path(temp_dir)
+    for dir_path in backup_directories:
+        if dir_path.is_dir():
+            shutil.copytree(dir_path, temp_path / dir_path.name, dirs_exist_ok=True)
+        elif dir_path.is_file():
+            shutil.copy2(dir_path, temp_path / dir_path.name)
+
+    create_tarball(temp_path, backup_dir / backup_file)
+    shutil.move(backup_dir / backup_file, end_dir / backup_file)
+    copy_to_remote(end_dir / backup_file, remote_dir)
+
+clean_up_temps(backup_dir)

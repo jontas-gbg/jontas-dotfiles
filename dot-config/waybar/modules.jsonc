@@ -1,0 +1,143 @@
+ {
+ "custom/startmenu" : {
+        "format": "☰",
+        "on-click": "hyprctl dispatch exec walker",
+        "tooltip": false,
+    },
+    "hyprland/workspaces" : {
+        "format": "{}",
+        "on-click": "activate",
+        "active-only": false,
+        "all-outputs": true,
+        "persistent-workspaces": {
+             "*": 5
+        }       
+    },
+// * If playing music on local host
+    "custom/music": {
+        "exec": "~/.config/waybar/scripts/player",
+        "return-type": "json",
+        "format": "{}",
+        "interval": 1,
+        "exec-if": "pgrep -x mpv || pgrep -x spotify || pgrep -x audacious",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "escape": true
+    },
+
+// If playing music on remote host
+// "custom/music": {
+// "exec": "~/.config/waybar/scripts/player_remote_host",
+//  "return-type": "json",
+//  "format": "{}",
+//  "interval": 1,
+//  "on-click": "ssh cacherv 'playerctl play-pause'",
+//  "on-click-right": "ssh cacherv 'playerctl next'",
+//  "escape": true
+//  },
+
+    "custom/pacman": {
+        "format": "{icon}",
+        "return-type": "json",
+        "format-icons": {
+		    "has-updates": "󰊠",
+			"updated": "󰊠",
+        },
+        "exec-if": "which waybar-module-pacman-updates",
+        "exec": "waybar-module-pacman-updates --interval-seconds 5 --network-interval-seconds 300",
+        "on-click": "hyprctl dispatch exec '[float]' 'foot -e yay --noconfirm'"
+    },
+
+// Center
+      "clock": {
+        "format": "   {:%H:%M}",
+        "tooltip-format": "    {:%Y-%m-%d}", 
+        "on-click": "~/.config/waybar/scripts/calendar",
+    },
+    "custom/weather": {
+        "tooltip": true,
+        "format": "{}",
+        "interval": 1200,
+        "exec": "~/.config/waybar/scripts/wttr",
+        "return-type": "json"
+    },
+// Right
+   "network": {
+        "format-wifi": "",
+        "format-disconnected": "󰖪",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "family": "ipv4",
+        "tooltip-format-wifi": "󰑩 \t{essid}\n󰠿\t{signalStrength}%\n\t{bandwidthUpBits}\n\t{bandwidthDownBits}",
+        "interval": 10
+    },
+    "custom/proc": {
+        "format": "",
+        "tooltip-format": "Run btop",
+        "on-click": "hyprctl dispatch exec '[float]' 'foot --title=btop -e btop'",
+    },
+    "custom/keybinds": {
+        "format": "",
+        "tooltip-format": "Show keybinds",
+        "on-click": "~/.config/waybar/scripts/keybinds"
+    },
+  "pulseaudio": {
+    "format": "   {volume}%",
+    "on-click": "pavucontrol"
+  },
+  "bluetooth": {
+    "format-on": "󰂯",
+    "format-off": "󰂲",
+    "format-disabled": "", // an empty format will hide the module
+    "format-connected": "󰂱",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "on-click": "~/.config/waybar/scripts/toggle_bluetooth"
+ },
+  "memory": {
+    "interval": 30,
+    "format": "",
+    "tooltip-format": "{used:0.2f} GB",
+    },
+    "group/utils": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+            },
+        "modules":  [
+            "custom/wallpaper",
+            "custom/screenshot",
+            "custom/color",
+            "custom/cliphist"
+        ]
+    },
+    "custom/wallpaper": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Change wallpaper",        
+        "on-click": "~/.config/waybar/scripts/change_wallpaper",
+    }, 
+    "custom/screenshot": {
+        "format": "",
+        "tooltip-format": "Capture screen",
+        "on-click": "hyprshot -m region",
+        "on-click-right": "hyprshot -m window",
+    },
+    "custom/color": {
+      "format": "",
+      "tooltip-format": "Pick a color",
+      "on-click": "hyprpicker -a"
+    },
+    "custom/cliphist": {
+        "format": "",
+        "tooltip-format": "Clipboard history",
+        // "on-click": "sleep 0.1 && ~/.config/waybar/scripts/cliphist", 
+        "on-click": "rofi -modi clipboard:~/.config/waybar/scripts/cliphist-rofi-img -show clipboard -show-icons",
+        "interval" : 86400,
+        "tooltip": true
+    },
+      "custom/quit": {
+        "format": "",
+        "on-click": "wlogout"
+    },
+ }

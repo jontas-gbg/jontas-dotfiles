@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+
+ansiweather | sed 's/\x1b\[[0-9;]*m//g' > ~/.cache/wtr.txt
+
+
+

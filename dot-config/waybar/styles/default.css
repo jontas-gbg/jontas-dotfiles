@@ -1,0 +1,15 @@
+@define-color waybar-bg   #ffffff;
+@define-color main-bg     #111827;
+@define-color main-fg     #F8F8F8;
+@define-color active      #025939;
+@define-color inactive    #F8F8F8;
+@define-color disabled    #F8F8F8;
+@define-color enabled     #F8F8F8;
+@define-color hover       #333333;
+@define-color urgent      #eb4d4b;
+@define-color attention   #ff8112;
+@define-color updated     #c5fcb1;
+@define-color blinking    #f1ff85;
+@define-color dark        #1e1e1e;
+
+

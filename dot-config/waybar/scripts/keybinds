@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+
+yad --width=600 --height=640 \
+--posx=100 \
+--posy=0 \
+--title="Hyprland Keybindings" \
+--no-buttons \
+--list \
+--column=Keybind \
+--column=Description \
+--column=  \
+--timeout=60 \
+--timeout-indicator=right \
+"" " Exit " "" \
+"ESC" "Close this window" "󰤰" \
+"" "" "" \
+"" " Common " "" \
+" +SPACE" "Application  menu" "󰭣" \
+" +ENTER" "Terminal" "" \
+" +W" "Open Browser" "" \
+" +E" "Open Thunar" "" \
+" +Q" "Close focused window" "" \
+" +O" "Reload waybar" "" \
+" +L" "Lock screen" "" \
+" +Y" "Pin window to all workspaces" "󰤱" \
+"" "" "" \
+"" " Capture screen " "" \
+" +A" "Screenshot entire screen" "󰄀" \
+" +CTRL+A" "Screenshot area" "󰄀" \
+"+SHIFT+A" "Screenshot windows" "󰄀" \
+"" "" "" \
+"" " Toggles " "" \
+" +V" "Toggle floating/tiling" "󰕬" \
+" +J" "Toggles split mode (dwindle)" "󰕮" \
+" +F" "Toggle fullscreen" "󰍹" \
+" +K" "Toggles current window group mode" "" \
+"" "" "" \
+"" " Misc " "" \
+" +SHIFT+H" "Show keybindings" "󰡆" \
+" +SHIFT+P" "Open Calculator" "󰃬" \
+" +SHIFT+M" "Exits Hyprland" "" \
+" +SHIFT+Q" "Terminate focused window" "" \
+" +SHIFT+E" "Open Cosmic files" "" \
+" +CTRL+E" "TUI filemanager" "󰭴" \
+" +Tab" "Switches to the next window" "󰎗" \
+"" "" "" \
+"" " Window gaps " "" \
+" +G" "Remove gaps" "󰃇" \
+" +SHIFT+G" "Set prefered gaps" "󰃒" \
+"" "" "" \
+"" " Move/change window focus " "" \
+"+Left" "" "←" \
+"+Right" "" "→" \
+"+Up" "" "↑" \
+"+Down" "" "↓" \
+"" "" "" \
+"" " Move a window towards a direction " "" \
+"+Shift+Left" "" "←" \
+"+Shift+Right" "" "→" \
+"+Shift+Up" "" "↑" \
+"+Shift+Down" "" "↓" \
+"" "" "" \
+"" " Submap mode " "" \
+"+R" "Activates window resizing mode" "submap mode" \
+"" "Resize w. arrow keys" " " \
+"ESC" "Ends window resizing" "exit submap" \
+"" "" "" \
+"" " Quick resize window with keyboard " "" \
+"+CTRL+SHIFT+Left" "" "←" \
+"+CTRL+SHIFT+Right" "" "→" \
+"+CTRL+SHIFT+Up" "" "↑" \
+"+CTRL+SHIFT+Down" "" "↓" \
+"" "" ""\
+

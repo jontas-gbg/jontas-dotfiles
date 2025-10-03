@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+# Fetch Hyprland Github discussion forum and make a feed for Newsboat.
+# Systemd for fire the script once a day.
+# I've put my github token i the service file since I 
+# dont want to hard code it i the script.
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+import requests
+import xml.etree.ElementTree as ET
+import os
+
+TOKEN = os.getenv("GITHUB_TOKEN")
+
+GRAPHQL_URL = "https://api.github.com/graphql"
+QUERY = """
+{
+  repository(owner: "hyprwm", name: "Hyprland") {
+    discussions(first: 10) {
+      nodes {
+        title
+        url
+        createdAt
+        body
+      }
+    }
+  }
+}
+"""
+
+headers = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(GRAPHQL_URL, json={"query": QUERY}, headers=headers)
+data = response.json()
+
+# Create XML struct for RSS
+rss = ET.Element("rss", version="2.0")
+channel = ET.SubElement(rss, "channel")
+
+ET.SubElement(channel, "title").text = "Hyprland Discussions"
+ET.SubElement(channel, "link").text = "https://github.com/hyprwm/Hyprland/discussions"
+ET.SubElement(channel, "description").text = "Hyprland forum at GitHub"
+
+for discussion in data["data"]["repository"]["discussions"]["nodes"]:
+    item = ET.SubElement(channel, "item")
+    ET.SubElement(item, "title").text = discussion["title"]
+    ET.SubElement(item, "link").text = discussion["url"]
+    ET.SubElement(item, "pubDate").text = discussion["createdAt"]
+    ET.SubElement(item, "description").text = discussion["body"]
+
+# Create rss feed in xml format
+tree = ET.ElementTree(rss)
+with open(os.path.expanduser("~/.local/share/feeds/hyprland_discussions.xml"), "wb") as f:
+    tree.write(f, encoding="utf-8", xml_declaration=True)
+
+
