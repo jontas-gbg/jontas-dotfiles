@@ -32,6 +32,7 @@ LOCAL_DIRS=(
     "bin"
     "share/applications"
     "share/fastfetch"
+    "share/icons"
 )
 
 
