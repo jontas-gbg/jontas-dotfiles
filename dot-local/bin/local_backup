@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Keep a fresh copy of important dotfiles
-# Runs from systed daily and later syncs with github
+# Make a local backup of changed dotfiles
+# Commit and push to github repo
+# 
 #
 # jontas@gmx.com (2025)
 # SPDX-License-Identifier: MIT
@@ -90,3 +91,18 @@ else
     logger -t dotfiles_backup "WARNING: Wallpaper directory not found: $SOURCE_WALLPAPERS"
 fi
 
+# Git commit och push
+cd "$DOTFILES_BASE" || exit
+
+# Lägg till alla ändrade filer
+git add .
+
+# Kontrollera om något är staged för commit
+if ! git diff --cached --quiet; then
+    COMMIT_MSG="Auto backup $(date '+%Y-%m-%d %H:%M:%S')"
+    git commit -m "$COMMIT_MSG"
+    git push origin main
+    logger -t dotfiles_backup "Committed and pushed changes to GitHub: $COMMIT_MSG"
+else
+    logger -t dotfiles_backup "No changes to commit"
+fi
