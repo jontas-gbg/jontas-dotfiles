@@ -97,7 +97,7 @@ git add .
 
 # Check if anything is staged for commit
 if ! git diff --cached --quiet; then
-    COMMIT_MSG="Auto backup $(date '+%Y-%m-%d %H:%M:%S')"
+    COMMIT_MSG="Auto synced changes $(date '+%Y-%m-%d %H:%M:%S')"
     git commit -m "$COMMIT_MSG"
     git push origin master
     logger -t dotfiles_backup "Committed and pushed changes to GitHub: $COMMIT_MSG"
