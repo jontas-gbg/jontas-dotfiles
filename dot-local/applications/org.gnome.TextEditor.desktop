@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Text Editor
+Icon=org.gnome.TextEditor
+Exec=gnome-text-editor %U
+Terminal=false
+MimeType=text/plain;application/x-zerosize;
+Categories=GNOME;GTK;Utility;TextEditor;
+DBusActivatable=true
+Comment=View and edit text files
+StartupNotify=true
+Actions=new-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=gnome-text-editor --new-window
