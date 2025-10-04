@@ -1,9 +1,5 @@
-## Source from conf.d before our fish config
-source /usr/share/cachyos-fish-config/conf.d/done.fish
-
 ## Run fastfetch as welcome message
 function fish_greeting
-    # fastfetch --config ~/.config/jontas.jsonc
     fastfetch --config ~/.local/share/fastfetch/presets/arch.jsonc
 end
 
@@ -12,8 +8,8 @@ set -x MANROFFOPT "-c"
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 # Set settings for https://github.com/franciscolourenco/done
-set -U __done_min_cmd_duration 10000
-set -U __done_notification_urgency_level low
+set -g __done_min_cmd_duration 10000
+set -g __done_notification_urgency_level low
 
 ## Environment setup
 # Apply .profile: use this to put fish compatible .profile stuff in
@@ -22,11 +18,7 @@ if test -f ~/.fish_profile
 end
 
 # Add ~/.local/bin to PATH
-if test -d ~/.local/bin
-    if not contains -- ~/.local/bin $PATH
-        set -p PATH ~/.local/bin
-    end
-end
+fish_add_path ~/.local/bin
 
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
