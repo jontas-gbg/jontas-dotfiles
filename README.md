@@ -11,3 +11,4 @@ Elephant and Hyprpolkitagent runs as systemd services in userspace. Eg. `elephan
 ## Screenshots
 ![Hyprland Desktop](screenshots/desktop1.png)
 ![Hyprland Desktop](screenshots/desktop2.png)
+![Hyprland Desktop](screenshots/desktop3.png)
