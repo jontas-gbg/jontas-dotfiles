@@ -1,6 +1,6 @@
 ## Run fastfetch as welcome message
 function fish_greeting
-    fastfetch --config ~/.local/share/fastfetch/presets/arch.jsonc
+    fastfetch --config arch
 end
 
 # Format man pages
