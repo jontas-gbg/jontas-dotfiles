@@ -8,6 +8,7 @@ alias c='clear'
 alias v='sudo nano'
 alias cat='bat'
 alias yay='paru'
+alias pacs='pacman -Ss'
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias untar='tar -zxvf '
 alias psmem='ps auxf | sort -nr -k 4'
@@ -32,6 +33,6 @@ alias speedtest='speedtest++ --download'
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 
 alias jctl="journalctl -p 3 -xb"
-alias vdw='curl -s "https://wttr.in/Landvetter?M&T&F&lang=sv"'
-alias vda='ansiweather'
+alias wttr='curl -s "https://wttr.in/Landvetter?M&T&F&lang=sv"'
+alias aw='ansiweather'
 

@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
+# Swedish Radio
+# 
 # jontas@gmx.com (2025)
 # SPDX-License-Identifier: MIT
 
 declare -A sr_urls
-sr_urls[1]="https://http-live.sr.se/p1-aac-192"
+sr_urls[1]="https://live1.sr.se/p1-aac-192"
 sr_urls[2]="https://live1.sr.se/p2-flac"
-sr_urls[3]="https://http-live.sr.se/p3-aac-192"
-sr_urls[4]="https://live1.sr.se/p4gbg-aac-320"
-sr_urls[5]="https://live1.sr.se/p4plus-aac-320"
-sr_urls[6]="https://http-live.sr.se/ekotsanderdirekt-aac-192"
+sr_urls[3]="https://live1.sr.se/p3-aac-192"
+sr_urls[4]="https://live1.sr.se/p4gbg-aac-320?latency=high"
+sr_urls[5]="https://live1.sr.se/p4plus-aac-320?latency=high"
+sr_urls[6]="https://live1.sr.se/ekotsanderdirekt-aac-192"
 
 declare -A sr_stations
 sr_stations[1]="Sveriges Radio P1"
@@ -43,7 +45,6 @@ kill_players() {
 print_available_options() {
   options=$(echo ${!sr_urls[@]} | tr ' ' '\n' | sort -n | tr '\n' ' ')
   echo -e "Available options: $options"
-  echo "Type 'sr h' for a channel list"
 }
 
 play_station() {
@@ -57,11 +58,6 @@ play_station() {
     else
       mpv "${sr_urls[$station_index]}" &>/dev/null &
     fi
-
-    if ! pgrep -f "mpv .*${sr_urls[$station_index]}" >/dev/null; then
-      print_color "red" "Failed to start mpv"
-      exit 1
-    fi
   fi
 }
 
@@ -70,9 +66,6 @@ play_station() {
 if [ "$1" == "q" ]; then
   print_color "green" "\t*poff*"
   kill_players
-elif [ "$1" == "h" ]; then
-  clear
-  cat ~/.local/share/help-files/sr-script-help
 elif [ $# -ne 1 ] || [[ ! ${sr_urls[$1]} ]]; then
   print_color "yellow" "Invalid usage or station index"
   print_available_options

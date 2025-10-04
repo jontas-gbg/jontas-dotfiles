@@ -160,6 +160,7 @@ window#waybar.empty #window {
 #custom-color,
 #custom-screenshot {
     color: @popout;
+    transition: all 0.25s ease-in-out;
 }
 
 #custom-screenshot:hover,
@@ -170,6 +171,7 @@ window#waybar.empty #window {
     border-color: transparent;
     background-color: transparent;
     border: 1px solid @popouth;
+    transition: all 0.25s ease-in-out;
 }
 #custom-quit {
     padding: 0 16px 0 12px;
@@ -186,4 +188,5 @@ tooltip {
     background: rgba(43, 48, 59, 0.7);
     border: 1px solid rgba(100, 114, 125, 0.5);
     border-radius: 15px;
+    transition: all 0.15s ease-in-out;
 }
