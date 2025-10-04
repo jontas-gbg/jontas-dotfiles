@@ -1,6 +1,6 @@
-# Hyprland setup for Arch Linux
+# Jontas Hyprland setup
 ## About
-A fast and light configuration without endless animations and anime stuff. No installation scripts. Review configuration files and implement the parts you like in your own config.
+A fast and light configuration running on CachyOS. No endless animations and anime stuff. No installation scripts. Review configuration files and implement the parts you like in your own config.
 ## Using
 * [Hypr ecosystem](https://wiki.hypr.land/Hypr-Ecosystem/)
 * [Waybar](https://github.com/Alexays/Waybar)
