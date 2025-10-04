@@ -16,11 +16,12 @@ declare -A PLAYER_ICONS=(
     ["firefox"]=""
     ["chrome"]=""
     ["audacious"]="󰜟"
+    ["lollypop"]="󰜟"
     ["default"]=""
 )
 
 RADIO="mpv"
-STREAMAPP=("vlc" "spotube" "spotify" "audacious")
+STREAMAPP=("vlc" "spotube" "spotify" "lollypop")
 POD="kasts"
 
 RADIO_STATUS=$(playerctl --player="$RADIO" status 2>/dev/null)

@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-# This script are from Hyperland's Wiki
-# See: https://wiki.hyprland.org/Hypr-Ecosystem/hyprpaper/
+#
+# jontas@gmx.com (2024)
+# SPDX-License-Identifier: MIT
 
-WALLPAPER_DIR="$HOME/Pictures/wallpapers/"
-CURRENT_WALL=$(hyprctl hyprpaper listloaded)
+MONITOR="eDP-1"
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 
-# Get a random wallpaper that is not the current one
-WALLPAPER=$(find "$WALLPAPER_DIR" -type f ! -name "$(basename "$CURRENT_WALL")" | shuf -n 1)
+# Chose a random wallpaper
+WALLPAPER=$(find "$WALLPAPER_DIR" -type f | shuf -n 1)
 
-# Apply the selected wallpaper
-hyprctl hyprpaper reload ,"$WALLPAPER"
+# Clear and add new wallpaper
+hyprctl hyprpaper unload all
+hyprctl hyprpaper preload "$WALLPAPER"
+hyprctl hyprpaper wallpaper "$MONITOR,$WALLPAPER"
+

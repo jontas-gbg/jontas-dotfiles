@@ -1,7 +1,7 @@
  {
  "custom/startmenu" : {
         "format": "☰",
-        "on-click": "hyprctl dispatch exec walker",
+        "on-click": "walker --hideqa",
         "tooltip": false,
     },
     "hyprland/workspaces" : {
@@ -131,8 +131,7 @@
     "custom/cliphist": {
         "format": "",
         "tooltip-format": "Clipboard history",
-        // "on-click": "sleep 0.1 && ~/.config/waybar/scripts/cliphist", 
-        "on-click": "rofi -modi clipboard:~/.config/waybar/scripts/cliphist-rofi-img -show clipboard -show-icons",
+        "on-click": "walker -m clipboard",
         "interval" : 86400,
         "tooltip": true
     },
