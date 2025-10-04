@@ -6,6 +6,7 @@ A fast and light configuration running on CachyOS. No endless animations and ani
 * [Waybar](https://github.com/Alexays/Waybar)
 * [Elephant](https://github.com/abenz1267/elephant/)
 * [Walker](https://github.com/abenz1267/walker/)
+
 Elephant and Hyprpolkitagent runs as systemd services in userspace. Eg. `elephant service enable` and `systemctl --user enable --now hyprpolkitagent.service`
 `
 ## Screenshots
