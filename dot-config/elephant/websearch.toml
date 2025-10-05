@@ -20,6 +20,13 @@ icon = "/home/jontas/.local/share/icons/system/arch.svg"
 prefix = "aw: "
 
 [[entries]]
+name = "Arch AUR"
+default = false
+url = "https://aur.archlinux.org/packages?O=0&K=%TERM%"
+icon = "/home/jontas/.local/share/icons/system/arch.svg"
+prefix = "aur: "
+
+[[entries]]
 name = "Svenska wikipedia"
 default = false
 url = "https://sv.wikipedia.org/w/index.php?search=%TERM%"
