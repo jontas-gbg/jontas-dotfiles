@@ -29,7 +29,8 @@ quick_activate = ["F1", "F2", "F3", "F4"]
 default = [
   "desktopapplications",
   "calc",
-  "runner",
+  "clipboard",
+  "files",
   "menus",
   "websearch",
 ] # providers to be queried by default
@@ -42,10 +43,6 @@ provider = "providerlist"
 [[providers.prefixes]]
 prefix = "/"
 provider = "files"
-
-[[providers.prefixes]]
-prefix = "."
-provider = "symbols"
 
 [[providers.prefixes]]
 prefix = "!"
