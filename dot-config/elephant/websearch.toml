@@ -24,4 +24,26 @@ name = "Svenska wikipedia"
 default = false
 url = "https://sv.wikipedia.org/w/index.php?search=%TERM%"
 icon = "/home/jontas/.local/share/icons/misc/wikipedia.png"
-prefix = "sv: "
+prefix = "sw: "
+
+[[entries]]
+name = "CachyOS wiki"
+default = false
+url = "https://www.google.com/search?q=%TERM%+site%3Awiki.cachyos.org"
+icon = "/home/jontas/.local/share/icons/system/cachyos.svg"
+prefix = "cw: "
+
+[[entries]]
+name = "Hyprland wiki"
+default = false
+url = "https://www.google.com/search?q=%TERM%+site%3Awiki.hypr.land"
+icon = "/home/jontas/.local/share/icons/system/hyprland.svg"
+prefix = "hw: "
+
+
+[[entries]]
+name = "IMDb"
+default = false
+url = "https://www.imdb.com/find?q=%TERM%"
+icon = "/home/jontas/.local/share/icons/misc/imdb-icon.svg"
+prefix = "im: "

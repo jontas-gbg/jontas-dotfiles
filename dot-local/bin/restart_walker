@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Try stop Walker via systemd scope
+if systemctl --user stop "app-Hyprland-walker-*.scope" 2>/dev/null; then
+    notify-send "Walker" "Stopped via systemd"
+else
+# Or use pkill
+    notify-send "Walker" "Systemd failed, execute pkill"
+    pkill walker
+fi
+
+# Start Walker again
+uwsm app -- walker --gapplication-service > /dev/null 2>&1 &
+notify-send "Walker" "Up again"
