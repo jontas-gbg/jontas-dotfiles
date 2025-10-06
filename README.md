@@ -1,6 +1,6 @@
 # Jontas Hyprland setup
 ## About
-A fast and light themed configuration running on CachyOS. No endless animations or anime stuff. No installation scripts. Review configuration files and implement the parts you like in your own config. I know you can do it.
+A fast, light themed, configuration running on CachyOS. No endless animations or anime stuff. No installation scripts. Review configuration files and implement the parts you like in your own config. I know you can do it.
 ## Using
 * [Hypr ecosystem](https://wiki.hypr.land/Hypr-Ecosystem/)
 * [Waybar](https://github.com/Alexays/Waybar)
