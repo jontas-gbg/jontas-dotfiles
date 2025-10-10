@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+#
+# hypr-binds-menu.sh
+# Display Hyprland binds and execute selected one using walker -d
+#
+
+# Get the raw binds output
+raw=$(hyprctl binds)
+
+# Parse and format binds into "DisplayText<tab>Dispatcher Arg"
+parsed=$(echo "$raw" | awk '
+function add_bind() {
+    if (!type || !dispatcher) return
+    moddisp = (mod ? mod " + " : "")
+    keydisp = (key != "" ? key : "<no key>")
+    descdisp = (description ? description : "<no description>")
+    action = dispatcher
+    if (arg != "") action = action " " arg
+    print moddisp keydisp " ... " descdisp "\t" action
+    type=mod=key=description=dispatcher=arg=""
+}
+
+/^bind[a-z]*/ { add_bind(); type=$1 }
+/[[:space:]]*modmask:/ {
+    m=$2
+    if (m==65) mod="Super Shift"
+    else if (m==64) mod="Super"
+    else if (m==4) mod="Ctrl"
+    else if (m==1) mod="Shift"
+    else if (m==0) mod=""
+    else if (m==9) mod="Alt Shift"
+    else mod=m
+}
+/[[:space:]]*key:/ {
+    k=$2
+    if (k=="0") key="0"
+    else if (k=="mouse:272") key="Mouse_LMB"
+    else if (k=="mouse_down") key="Mouse_ScrollDown"
+    else if (k=="mouse_up") key="Mouse_ScrollUp"
+    else if (k=="mouse:273") key="Mouse_RMB"
+    else if (k=="print") key="PrtSc"
+    else if (k ~ /^XF86/) {
+        key = k
+        sub(/^XF86(Audio)?/, "Media_", key)
+        sub(/^_+/, "", key)
+        gsub(/__+/, "_", key)
+    } else key=k
+}
+/[[:space:]]*description:/ {
+    description=$0
+    sub(/^[[:space:]]*description:[[:space:]]*/, "", description)
+}
+/[[:space:]]*dispatcher:/ { dispatcher=$2 }
+/[[:space:]]*arg:/ { 
+    arg=$0
+    sub(/^[[:space:]]*arg:[[:space:]]*/, "", arg)
+}
+END { add_bind() }
+')
+
+# If no binds found
+[[ -z "$parsed" ]] && { echo "No binds found."; exit 1; }
+
+# Show walker menu and get choice
+choice=$(echo "$parsed" | cut -f1 | walker -d)
+
+# Get the corresponding command
+cmd=$(echo "$parsed" | grep -F "$choice" | cut -f2)
+
+# Execute if found
+if [[ -n "$cmd" ]]; then
+    notify-send "Executing Hyprland Action" "$cmd"
+    hyprctl dispatch $cmd
+else
+    echo "No command found for selection."
+fi
