@@ -16,12 +16,12 @@
     ],
     "modules-right": [
         "group/utils",
-        "custom/proc",
         "memory",
         "custom/keybinds",
         "network",
-        "pulseaudio",
         "bluetooth",
+        "battery",
+        "pulseaudio",        
         "custom/quit"
       ],
 }

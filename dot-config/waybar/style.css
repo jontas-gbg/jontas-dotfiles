@@ -63,6 +63,7 @@ window#waybar.empty #window {
 #pulseaudio,
 #network,
 #bluetooth,
+#battery,
 #memory,
 #clock,
 #tray,

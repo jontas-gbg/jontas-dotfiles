@@ -70,11 +70,6 @@
         "tooltip-format-wifi": "󰑩 \t{essid}\n󰠿\t{signalStrength}%\n\t{bandwidthUpBits}\n\t{bandwidthDownBits}",
         "interval": 10
     },
-    "custom/proc": {
-        "format": "",
-        "tooltip-format": "Run btop",
-        "on-click": "hyprctl dispatch exec '[float]' 'foot --title=btop -e btop'",
-    },
     "custom/keybinds": {
         "format": "",
         "tooltip-format": "Show keybinds",
@@ -97,7 +92,20 @@
     "interval": 30,
     "format": "",
     "tooltip-format": "{used:0.2f} GB",
+    "on-click": "hyprctl dispatch exec '[float]' 'foot --title=btop -e btop'",
     },
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 20
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+  },
     "group/utils": {
         "orientation": "inherit",
         "drawer": {
