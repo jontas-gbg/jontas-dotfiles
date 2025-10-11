@@ -55,7 +55,7 @@ if [[ $RADIO_STATUS == "Playing" ]]; then
     fi
 elif [[ $POD_STATUS == "Playing" ]]; then
     PLAYER=$POD
-    CLASS="${PLAYER:-default}"
+    CLASS="podcasts"
     ARTIST=$(playerctl metadata --player=$POD --format '{{ artist }}')
     ALBUM=$(playerctl metadata --player=$POD --format '{{ album }}')
     TITLE=$(playerctl metadata --player=$POD --format '{{ title }}' | sed 's/^[0-9]\+\([.:]\)\s*//')

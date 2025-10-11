@@ -111,6 +111,10 @@ window#waybar.empty #window {
 #custom-music.kasts {
     color: #5690cc;
 }
+#custom-music.podcasts {
+    color: #5690cc;
+}
+
 #custom-music.spotify {
     color: #1db954;
 }

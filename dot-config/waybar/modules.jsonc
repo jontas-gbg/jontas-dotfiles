@@ -19,7 +19,7 @@
         "return-type": "json",
         "format": "{}",
         "interval": 1,
-        "exec-if": "pgrep -x mpv || pgrep -x spotify || pgrep -x audacious",
+        "exec-if": "pgrep -x mpv || pgrep -x spotify || pgrep -x audacious || pgrep -x gnome-podcasts",
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
         "escape": true
