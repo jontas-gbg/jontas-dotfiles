@@ -8,7 +8,7 @@
 
 declare -A PLAYER_ICONS=(
     ["mpv"]="󰐹"
-    ["kasts"]="󰦔"
+    ["org.gnome.Podcasts"]="󰦔"
     ["vlc"]="󰕼"
     ["spotube"]=""
     ["spotify"]="󰓇"
@@ -22,7 +22,7 @@ declare -A PLAYER_ICONS=(
 
 RADIO="mpv"
 STREAMAPP=("vlc" "spotube" "spotify" "lollypop")
-POD="kasts"
+POD="org.gnome.Podcasts"
 
 RADIO_STATUS=$(playerctl --player="$RADIO" status 2>/dev/null)
 POD_STATUS=$(playerctl --player="$POD" status 2>/dev/null)
