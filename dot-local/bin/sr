@@ -1,76 +1,152 @@
 #!/usr/bin/env bash
 
-# Swedish Radio
-# 
+# Swedish Radio Player Script
+#
 # jontas@gmx.com (2025)
 # SPDX-License-Identifier: MIT
 
-declare -A sr_urls
-sr_urls[1]="https://live1.sr.se/p1-aac-192"
-sr_urls[2]="https://live1.sr.se/p2-flac"
-sr_urls[3]="https://live1.sr.se/p3-aac-192"
-sr_urls[4]="https://live1.sr.se/p4gbg-aac-320?latency=high"
-sr_urls[5]="https://live1.sr.se/p4plus-aac-320?latency=high"
-sr_urls[6]="https://live1.sr.se/ekotsanderdirekt-aac-192"
+# Set strict mode
+set -euo pipefail
 
-declare -A sr_stations
-sr_stations[1]="Sveriges Radio P1"
-sr_stations[2]="Sveriges Radio P2"
-sr_stations[3]="Sveriges Radio P3"
-sr_stations[4]="Sveriges Radio P4"
-sr_stations[5]="Sveriges Radio P4 Plus"
-sr_stations[6]="Ekot direkt!"
+# --- Configurations ---
 
-declare -A color_codes
-color_codes[red]=31
-color_codes[green]=32
-color_codes[yellow]=33
+# Station URLs
+declare -A sr_urls=(
+  [1]="https://live1.sr.se/p1-aac-192?latency=high"
+  [2]="https://live1.sr.se/p2-flac"
+  [3]="https://live1.sr.se/p3-aac-192"
+  [4]="https://live1.sr.se/p4gbg-aac-320?latency=high"
+  [5]="https://live1.sr.se/p4plus-aac-320?latency=high"
+  [6]="https://live1.sr.se/ekotsanderdirekt-aac-192"
+)
 
+# Station names
+declare -A sr_stations=(
+  [1]="Sveriges Radio P1"
+  [2]="Sveriges Radio P2"
+  [3]="Sveriges Radio P3"
+  [4]="Sveriges Radio P4"
+  [5]="Sveriges Radio P4 Plus"
+  [6]="Ekot direkt!"
+)
+
+# --- Functions ---
+
+# Print colored output
 print_color() {
-  local color_name=$1
-  local message=$2
-  printf "\033[1;${color_codes[$color_name]}m${message}\033[0m\n"
+  local color_code message=$2
+  case $1 in
+    red) color_code=31 ;;
+    green) color_code=32 ;;
+    yellow) color_code=33 ;;
+    *) echo "$message"; return 0 ;;
+  esac
+  printf '\033[1;%dm%s\033[0m\n' "$color_code" "$message"
 }
 
+# Kills common media players (generic cleanup)
 kill_players() {
-  for player in mpv shortwave vlc; do
-    if pgrep -f "$player" >/dev/null; then
-      if ! pkill "$player"; then
-        print_color "31" "Failed to kill $player process"
-      fi
+  local players=(mpv shortwave vlc)
+  
+  # Check and kill specific processes
+   for player in "${players[@]}"; do
+    if pgrep -x "$player" >/dev/null 2>&1; then
+      # shellcheck disable=SC2015
+      pkill -x "$player" ||
+        print_color red "Failed to kill $player."
     fi
   done
 }
 
+# Displays available station numbers
 print_available_options() {
-  options=$(echo ${!sr_urls[@]} | tr ' ' '\n' | sort -n | tr '\n' ' ')
-  echo -e "Available options: $options"
+  local options
+  # Sort keys numerically and join them into a single line
+  options=$(printf '%s\n' "${!sr_urls[@]}" | sort -n | paste -sd ' ')
+  echo "Available options: $options"
 }
 
+# Plays the selected station
 play_station() {
   local station_index=$1
-  if [[ ${sr_urls[$station_index]} ]]; then
-    print_color "green" "Playing ${sr_stations[$station_index]}"
-    if [[ "$station_index" == "2" || "$station_index" == "7" ]]; then
-      mpv "${sr_urls[$station_index]}" | stdbuf -oL awk -F ': ' '/icy-title/ {print $3}' > /tmp/icy-title-p2 &
-    elif [[ "$station_index" == "5" ]]; then
-      mpv "${sr_urls[$station_index]}" | stdbuf -oL awk -F ': ' '/icy-title/ {print $4}' > /tmp/icy-title-p4plus &
-    else
-      mpv "${sr_urls[$station_index]}" &>/dev/null &
-    fi
+  
+  # Check if the station index is valid
+  if [[ ! ${sr_urls[$station_index]:-} ]]; then
+    print_color red "Invalid station index: $station_index"
+    return 1
   fi
+  
+  print_color green "Playing ${sr_stations[$station_index]}"
+  
+  # Special handling for stations with ICY title tracking
+  # mpv logs ICY titles to stderr, which is piped via 2>&1 to awk
+  # shellcheck disable=SC2016
+  case $station_index in
+    2)
+      mpv "${sr_urls[$station_index]}" 2>&1 | 
+        stdbuf -oL awk -F': ' '/icy-title/ {print $3}' > /tmp/icy-title-p2 &
+      ;;
+    5)
+      mpv "${sr_urls[$station_index]}" 2>&1 | 
+        stdbuf -oL awk -F': ' '/icy-title/ {print $4}' > /tmp/icy-title-p4plus &
+      ;;
+    *)
+      # Default case: Play silently in the background
+      mpv "${sr_urls[$station_index]}" &>/dev/null &
+      ;;
+  esac
+  
+  # Store the PID of the started process for later cleanup
+  echo $! > /tmp/radio-player.pid
 }
 
+# --- Main Logic ---
 
-# Main logic
-if [ "$1" == "q" ]; then
-  print_color "green" "\t*poff*"
+main() {
+  local pid_file="/tmp/radio-player.pid"
+
+  # Check number of arguments
+  if [[ $# -ne 1 ]]; then
+    print_color yellow "Usage: $0 <station_number|q>"
+    print_available_options
+    exit 1
+  fi
+  
+  # Shutdown radio
+  if [[ $1 == "q" ]]; then
+    print_color green "*poff*"
+
+    # Attempt to kill the specifically saved PID (more precise)
+    if [[ -f "$pid_file" ]]; then
+      local player_pid
+      player_pid=$(<"$pid_file")
+      
+      # Kill the process (and its children, including the awk pipeline)
+      if kill "$player_pid" 2>/dev/null; then
+        print_color yellow "Killed specific player PID: $player_pid"
+      fi
+      
+      # Clean up PID file and temporary ICY files
+      trap 'rm -f "$pid_file" /tmp/icy-title-p2 /tmp/icy-title-p4plus' EXIT
+    fi
+    
+    # Kill generic players (as a fallback/catch-all)
+    kill_players
+
+    exit 0
+  fi
+  
+  # Check if the station index is valid (pre-check)
+  if [[ ! ${sr_urls[$1]:-} ]]; then
+    print_color yellow "Invalid station index: $1"
+    print_available_options
+    exit 1
+  fi
+  
+  # Kill existing players and start the new one
   kill_players
-elif [ $# -ne 1 ] || [[ ! ${sr_urls[$1]} ]]; then
-  print_color "yellow" "Invalid usage or station index"
-  print_available_options
-  exit 1
-else
-  kill_players
+  
   play_station "$1"
-fi
+}
+
+main "$@"
