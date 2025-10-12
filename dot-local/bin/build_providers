@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Runs from systemd daily
+#
+# jontas@gmx.com (2025)
+# SPDX-License-Identifier: MIT
+
+REPO_ROOT="$HOME/Documents/projects/cloned_repos/elephant"
+PROVIDER_ROOT="$REPO_ROOT/internal/providers"
+OUTPUT_DIR="$HOME/.config/elephant/providers"
+UPDATED_PROVIDERS=()
+
+cd "$REPO_ROOT"
+CHANGES=$(git pull --quiet)
+
+if [ -n "$CHANGES" ]; then
+    notify-send "Elephant" "Updates fetched fro GitHub"
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+for DIR in "$PROVIDER_ROOT"/*; do
+    [ -d "$DIR" ] || continue
+    cd "$DIR"
+    go build -buildmode=plugin
+    for SOFILE in *.so; do
+        [ -f "$SOFILE" ] || continue
+        cp -f "$SOFILE" "$OUTPUT_DIR/"
+        UPDATED_PROVIDERS+=("$(basename "$DIR")")
+    done
+done
+
+if [ ${#UPDATED_PROVIDERS[@]} -gt 0 ]; then
+    PROVIDER_LIST=$(IFS=, ; echo "${UPDATED_PROVIDERS[*]}")
+    notify-send "Elephant" "Provider(s) updated: $PROVIDER_LIST"
+else
+    notify-send "Elephant" "No new providers"
+fi
+
