@@ -6,6 +6,13 @@ icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
 prefix = "pp: "
 
 [[entries]]
+name = "ChatGPT"
+default = fasle
+url = "https://chat.openai.com/?q=%TERM%"
+icon = "/home/jontas/.local/share/icons/ai/chatgpt-ai.svg"
+prefix = "ai: "
+
+[[entries]] 
 name = "Grok"
 default = false
 url = "https://x.com/i/grok?text=%TERM%"
