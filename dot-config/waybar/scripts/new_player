@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+# This script is extremely situational, just for my very own needs.
+# You'd better find a better solution somewhere. Or spend some time tweaking this.
+#
+# jontas@gmx.com (2024)
+# SPDX-License-Identifier: MIT
+
+
+# Icons for known players
+declare -A PLAYER_ICONS=(
+    ["mpv"]="󰐹"
+    ["org.gnome.Podcasts"]="󰦔"
+    ["vlc"]="󰕼"
+    ["spotube"]=""
+    ["spotify"]="󰓇"
+    ["strawberry"]="󰓃"
+    ["firefox"]=""
+    ["chrome"]=""
+    ["brave"]=""  # Add Brave icon
+    ["audacious"]="󰜟"
+    ["lollypop"]="󰜟"
+    ["default"]=""
+)
+
+# Special handling
+RADIO_PLAYER="mpv"
+PODCAST_PLAYER="org.gnome.Podcasts"
+STREAM_APPS=("vlc" "spotube" "spotify" "lollypop")
+
+# Helper: safely get metadata
+get_metadata() {
+    local player="$1"
+    playerctl metadata --player="$player" --format '{"artist":"{{artist}}","title":"{{title}}","album":"{{album}}"}' 2>/dev/null
+}
+
+# Helper: sanitize and extract title for radio
+sanitize_radio_title() {
+    local title="$1"
+    if [[ "$title" == "p1-aac-192" ]]; then
+        echo "Sveriges Radio P1"
+    elif [[ "$title" == *"spelar nu: "* ]]; then
+        echo "${title#*spelar nu: }"
+    else
+        echo "$title"
+    fi
+}
+
+# Initialize
+TEXT=""
+TOOLTIP=""
+ICON=""
+CLASS="stopped"
+
+# Check radio first
+if [[ "$(playerctl --player="$RADIO_PLAYER" status 2>/dev/null)" == "Playing" ]]; then
+    CLASS="$RADIO_PLAYER"
+    read -r artist title album < <(get_metadata "$RADIO_PLAYER" | jq -r '.artist // "", .title // "", .album // ""')
+    if [[ -n "$artist" && -n "$album" ]]; then
+        TEXT="$artist - $title"
+        TOOLTIP="$artist\n$album\n$title"
+    else
+        display_title=$(sanitize_radio_title "$title")
+        TEXT="$display_title"
+        TOOLTIP="$display_title"
+    fi
+    ICON="${PLAYER_ICONS[$RADIO_PLAYER]:-${PLAYER_ICONS[default]}}"
+
+# Check podcasts
+elif [[ "$(playerctl --player="$PODCAST_PLAYER" status 2>/dev/null)" == "Playing" ]]; then
+    CLASS="podcasts"
+    read -r artist title album < <(get_metadata "$PODCAST_PLAYER" | jq -r '.artist // "", .title // "", .album // ""')
+    # Remove leading numbers like "1. Episode Name"
+    clean_title=$(echo "$title" | sed 's/^[0-9]\+[.:]\s*//')
+    TEXT="$album - $clean_title"
+    TOOLTIP="\t$artist\n\t$album\n\t$clean_title"
+    ICON="${PLAYER_ICONS[$PODCAST_PLAYER]}"
+
+# Check other players
+else
+    # Get list of active players
+    while IFS= read -r player; do
+        [[ -z "$player" ]] && continue
+
+        # Normalize Brave (match brave, brave-browser, etc.)
+        if [[ "$player" == brave* ]]; then
+            display_player="brave"
+        else
+            display_player="$player"
+        fi
+
+        # Skip if not in our known list (optional: remove this to show all)
+        if [[ ! " ${STREAM_APPS[*]} " =~ " $display_player " ]] && [[ "$display_player" != "brave" ]] && [[ "$display_player" != "firefox" ]] && [[ "$display_player" != "chrome" ]]; then
+            continue
+        fi
+
+        if [[ "$(playerctl --player="$player" status 2>/dev/null)" == "Playing" ]]; then
+            CLASS="$display_player"
+            read -r artist title album < <(get_metadata "$player" | jq -r '.artist // "", .title // "", .album // ""')
+            TEXT="$artist - $title"
+            TOOLTIP="󰗋\t$artist\n󰓏\t$album\n\t$title"
+            ICON="${PLAYER_ICONS[$display_player]:-${PLAYER_ICONS[default]}}"
+            break
+        fi
+    done < <(playerctl --list-all)
+fi
+
+# Fallback if nothing playing
+if [[ -z "$TEXT" ]]; then
+    TEXT="No music"
+    TOOLTIP="Silence..."
+    ICON="󰏥"
+    CLASS="stopped"
+fi
+
+# Escape JSON special chars (basic)
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' \
+    "${ICON//\"/\\\"}" \
+    "${TOOLTIP//\"/\\\"}" \
+    "${CLASS//\"/\\\"}"

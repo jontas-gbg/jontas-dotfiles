@@ -36,9 +36,9 @@ CLASS="${PLAYER:-default}"
 if [[ $RADIO_STATUS == "Playing" ]]; then
     PLAYER=$RADIO
     CLASS="${PLAYER:-default}"
-    TITLE=$(playerctl metadata --player=$RADIO --format '{{ title }}' 2>/dev/null)
-    ARTIST=$(playerctl metadata --player=$RADIO --format '{{ artist }}' 2>/dev/null)
-    ALBUM=$(playerctl metadata --player=$RADIO --format '{{ album }}' 2>/dev/null)
+    TITLE=$(playerctl metadata --player="$RADIO" --format '{{ title }}' 2>/dev/null)
+    ARTIST=$(playerctl metadata --player="$RADIO" --format '{{ artist }}' 2>/dev/null)
+    ALBUM=$(playerctl metadata --player="$RADIO" --format '{{ album }}' 2>/dev/null)
     if [[ -n "$ARTIST" && -n "$ALBUM" ]]; then
         TEXT="$ARTIST - $TITLE"
         TOOLTIP="$ARTIST\n$ALBUM\n$TITLE"
@@ -48,7 +48,7 @@ if [[ $RADIO_STATUS == "Playing" ]]; then
         TOOLTIP="Sveriges Radio P1"
         ICON="${PLAYER_ICONS[$RADIO]:-${PLAYER_ICONS[default]}}"
     else
-        DISPLAY_TEXT=$(playerctl metadata --player=$RADIO --format '{{ title }}' | awk '{sub(/.*spelar nu: /, ""); print}')
+        DISPLAY_TEXT=$(playerctl metadata --player="$RADIO" --format '{{ title }}' | awk '{sub(/.*spelar nu: /, ""); print}')
         TEXT="$DISPLAY_TEXT"
         TOOLTIP="$DISPLAY_TEXT"
         ICON="${PLAYER_ICONS[$RADIO]:-${PLAYER_ICONS[default]}}"
@@ -56,9 +56,9 @@ if [[ $RADIO_STATUS == "Playing" ]]; then
 elif [[ $POD_STATUS == "Playing" ]]; then
     PLAYER=$POD
     CLASS="podcasts"
-    ARTIST=$(playerctl metadata --player=$POD --format '{{ artist }}')
-    ALBUM=$(playerctl metadata --player=$POD --format '{{ album }}')
-    TITLE=$(playerctl metadata --player=$POD --format '{{ title }}' | sed 's/^[0-9]\+\([.:]\)\s*//')
+    ARTIST=$(playerctl metadata --player="$POD" --format '{{ artist }}')
+    ALBUM=$(playerctl metadata --player="$POD" --format '{{ album }}')
+    TITLE=$(playerctl metadata --player="$POD" --format '{{ title }}' | sed 's/^[0-9]\+\([.:]\)\s*//')
     TEXT="$ALBUM - $TITLE"
     TOOLTIP="\t$ARTIST\n\t$ALBUM\n\t$TITLE"
     ICON="${PLAYER_ICONS[$POD]}"
@@ -83,9 +83,9 @@ else
         STATUS=$(playerctl --player="$PLAYER" status 2>/dev/null)
         if [[ $STATUS == "Playing" ]]; then
             CLASS="${PLAYER:-default}"
-            ARTIST=$(playerctl metadata --player=$PLAYER --format '{{ artist }}')
-            ALBUM=$(playerctl metadata --player=$PLAYER --format '{{ album }}')
-            TITLE=$(playerctl metadata --player=$PLAYER --format '{{ title }}')
+            ARTIST=$(playerctl metadata --player="$PLAYER" --format '{{ artist }}')
+            ALBUM=$(playerctl metadata --player="$PLAYER" --format '{{ album }}')
+            TITLE=$(playerctl metadata --player="$PLAYER" --format '{{ title }}')
             TEXT="$ARTIST - $TITLE"
             TOOLTIP="󰗋\t$ARTIST\n󰓏\t$ALBUM\n\t$TITLE"
             ICON="${PLAYER_ICONS[$PLAYER]:-${PLAYER_ICONS[default]}}"
