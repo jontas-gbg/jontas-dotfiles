@@ -14,6 +14,7 @@
 
 * {
   all: unset;
+  font: "Adwaita Sans";
 }
 
 .normal-icons {
@@ -61,10 +62,15 @@ scrollbar {
   background: lighter(@window_bg_color);
   padding: 10px;
   color: @theme_fg_color;
+  border-radius: 6px;
+  transition: all 200ms ease-out;
 }
 
 .input:focus,
 .input:active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 3px alpha(@accent_bg_color, 0.3);
+  outline-offset: 1px;
 }
 
 .content-container {
@@ -106,11 +112,13 @@ child:selected .item-box {
 }
 
 .item-text {
+  color: #000621;
 }
 
 .item-subtext {
   font-size: 12px;
-  opacity: 0.5;
+  opacity: 0;
+  font-weight: 400;
 }
 
 .item-image,

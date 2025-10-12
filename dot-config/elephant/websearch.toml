@@ -1,63 +1,62 @@
 [[entries]]
 name = "Perplexity"
-default = true
+default = 'true'
 url = "https://www.perplexity.ai/search/?q=%TERM%"
 icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
 prefix = "pp: "
 
 [[entries]]
 name = "ChatGPT"
-default = fasle
+default = 'false'
 url = "https://chat.openai.com/?q=%TERM%"
 icon = "/home/jontas/.local/share/icons/ai/chatgpt-ai.svg"
-prefix = "ai: "
+prefix = "gpt: "
 
-[[entries]] 
+[[entries]]
 name = "Grok"
-default = false
+default = 'false'
 url = "https://x.com/i/grok?text=%TERM%"
 icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
 prefix = "gr: "
 
 [[entries]]
 name = "Arch Wiki"
-default = false
+default = 'false'
 url = "https://wiki.archlinux.org/index.php?search=%TERM%"
 icon = "/home/jontas/.local/share/icons/system/arch.svg"
 prefix = "aw: "
 
 [[entries]]
 name = "Arch AUR"
-default = false
+default = 'false'
 url = "https://aur.archlinux.org/packages?O=0&K=%TERM%"
 icon = "/home/jontas/.local/share/icons/system/arch.svg"
 prefix = "aur: "
 
 [[entries]]
 name = "Svenska wikipedia"
-default = false
+default = 'false'
 url = "https://sv.wikipedia.org/w/index.php?search=%TERM%"
 icon = "/home/jontas/.local/share/icons/misc/wikipedia.png"
 prefix = "sw: "
 
 [[entries]]
 name = "CachyOS wiki"
-default = false
+default = 'false'
 url = "https://www.google.com/search?q=%TERM%+site%3Awiki.cachyos.org"
 icon = "/home/jontas/.local/share/icons/system/cachyos.svg"
 prefix = "cw: "
 
 [[entries]]
 name = "Hyprland wiki"
-default = false
+default = 'false'
 url = "https://www.google.com/search?q=%TERM%+site%3Awiki.hypr.land"
 icon = "/home/jontas/.local/share/icons/system/hyprland.svg"
 prefix = "hw: "
 
-
 [[entries]]
 name = "IMDb"
-default = false
+default = 'false'
 url = "https://www.imdb.com/find?q=%TERM%"
 icon = "/home/jontas/.local/share/icons/misc/imdb-icon.svg"
 prefix = "im: "
