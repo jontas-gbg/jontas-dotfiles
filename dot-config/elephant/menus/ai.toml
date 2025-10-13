@@ -6,31 +6,36 @@ action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Defau
 
 [[entries]]
 text = "ChatGPT"
-icon = "/home/jontas/.local/share/icons/ai/chatgpt-ai.svg"
+icon = "/home/jontas/.local/share/icons/ai/chatgpt.svg"
 value = "https://chatgpt.com/"
 
 [[entries]]
+text = "Deepseek"
+icon = "/home/jontas/.local/share/icons/ai/deepseek.svg"
+value = "https://chat.deepseek.com/"
+
+[[entries]]
 text = "Gemini"
-icon = "/home/jontas/.local/share/icons/ai/gemini-ai.svg"
+icon = "/home/jontas/.local/share/icons/ai/gemini.svg"
 value = "https://gemini.google.com/app"
 
 [[entries]]
 text = "Grok"
-icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
+icon = "/home/jontas/.local/share/icons/ai/grok.svg"
 value = "https://grok.com/"
 
 [[entries]]
-text = "Grok Tasks"
-icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
-value = "https://grok.com/tasks"
+text = "Copilot"
+icon = "/home/jontas/.local/share/icons/ai/copilot.svg"
+value = "https://copilot.microsoft.com/"
 
 
 [[entries]]
 text = "Claude"
-icon = "/home/jontas/.local/share/icons/ai/claude-ai.png"
+icon = "/home/jontas/.local/share/icons/ai/claude.png"
 value = "https://claude.ai/new"
 
 [[entries]]
 text = "Perplexity"
-icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
+icon = "/home/jontas/.local/share/icons/ai/perplexity.png"
 value = "https://www.perplexity.ai/"
