@@ -9,9 +9,20 @@
         "on-click": "activate",
         "active-only": false,
         "all-outputs": true,
+         "format": "{icon}",
+         "format-icons": {
+             "1": " ",
+             "2": "",
+             "3": " ",
+             "4": " ",
+             "5": "",
+             "urgent": " ",
+             "focused": " ",
+             "default": " "
+         },
         "persistent-workspaces": {
              "*": 5
-        }       
+        },       
     },
 // * If playing music on local host
     "custom/music": {
@@ -76,7 +87,7 @@
         "on-click": "~/.config/waybar/scripts/keybinds"
     },
   "pulseaudio": {
-    "format": "   {volume}%",
+    "format": " {volume}%",
     "on-click": "pavucontrol"
   },
   "bluetooth": {

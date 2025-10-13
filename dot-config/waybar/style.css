@@ -1,7 +1,7 @@
 @import url("./styles/greyish.css");
 
 * {
-    font-family: "42dot Sans", "JetBrainsMono Nerd Font";
+    font-family: "42dot Sans", "Symbols Nerd Font";
     font-weight: 600;
     font-size: 15px;
     border-radius: 9px;
@@ -97,17 +97,19 @@ window#waybar.empty #window {
 }
 #custom-wallpaper,
 #memory {
-    padding: 0 17px 0 12px;
+    padding: 0 12px 0 12px;
 }
 #bluetooth {
     padding: 0 14px 0 13px;
+    font-size: 16px;
 }
 
-#custom-keybinds,
+#custom-keybinds {
+    padding: 0 11px 0 10px;
+}
 #custom-proc {
-    padding: 0 16px 0 10px;
+    padding: 0 1px 0 4px;
 }
-
 #custom-music.kasts {
     color: #5690cc;
 }
@@ -185,7 +187,7 @@ window#waybar.empty #window {
     padding: 0 14px 0 10px;
 }
 #network {
-    padding: 0 18px 0 9px;
+    padding: 0 11px 0 9px;
 }
 
 tooltip {
