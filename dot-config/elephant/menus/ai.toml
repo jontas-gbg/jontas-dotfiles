@@ -1,6 +1,6 @@
 name = "ai"
 name_pretty = "AI"
-icon = "/home/jontas/.local/share/icons/ai/ai-generic.png"
+icon = "/home/jontas/.local/share/icons/ai/generic.png"
 global_search = false
 action = "/opt/brave.com/brave-beta/brave-browser-beta --profile-directory=Default --app=%VALUE%"
 
