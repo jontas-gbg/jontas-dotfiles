@@ -32,7 +32,7 @@ value = "https://copilot.microsoft.com/"
 
 [[entries]]
 text = "Claude"
-icon = "/home/jontas/.local/share/icons/ai/claude.png"
+icon = "/home/jontas/.local/share/icons/ai/claude.svg"
 value = "https://claude.ai/new"
 
 [[entries]]

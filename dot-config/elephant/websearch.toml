@@ -2,21 +2,21 @@
 name = "Perplexity"
 default = 'true'
 url = "https://www.perplexity.ai/search/?q=%TERM%"
-icon = "/home/jontas/.local/share/icons/ai/perplexity-ai.png"
+icon = "/home/jontas/.local/share/icons/ai/perplexity.png"
 prefix = "pp: "
 
 [[entries]]
 name = "ChatGPT"
 default = 'false'
 url = "https://chat.openai.com/?q=%TERM%"
-icon = "/home/jontas/.local/share/icons/ai/chatgpt-ai.svg"
+icon = "/home/jontas/.local/share/icons/ai/chatgpt.svg"
 prefix = "gpt: "
 
 [[entries]]
 name = "Grok"
 default = 'false'
 url = "https://x.com/i/grok?text=%TERM%"
-icon = "/home/jontas/.local/share/icons/ai/grok-ai.svg"
+icon = "/home/jontas/.local/share/icons/ai/grok.svg"
 prefix = "gr: "
 
 [[entries]]
@@ -43,7 +43,7 @@ prefix = "sw: "
 [[entries]]
 name = "CachyOS wiki"
 default = 'false'
-url = "https://www.google.com/search?q=%TERM%+site%3Awiki.cachyos.org"
+url = "https://www.google.com/search?q=%s+site%3Awiki.cachyos.org"
 icon = "/home/jontas/.local/share/icons/system/cachyos.svg"
 prefix = "cw: "
 
@@ -58,5 +58,5 @@ prefix = "hw: "
 name = "IMDb"
 default = 'false'
 url = "https://www.imdb.com/find?q=%TERM%"
-icon = "/home/jontas/.local/share/icons/misc/imdb-icon.svg"
+icon = "/home/jontas/.local/share/icons/misc/imdb.svg"
 prefix = "im: "
