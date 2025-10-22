@@ -1,30 +1,30 @@
-# 📁 Ignore sensitive configuration files
+# Ignore sensitive configuration files
 dot-config/elephant/menus/my_stuff.toml
 
-# 📄 Ignore all PDF files
+# Ignore all PDF files
 *.pdf
 
-# 🐧 Arch Linux-specific cache files
+# Arch Linux-specific cache files
 *.pacnew
 *.pacsave
 *.part
 
-# 💻 Compiled binaries and object files
+# Compiled binaries and object files
 *.o
 *.out
 *.a
 *.so
 
-# 🧪 Test results and temporary logs
+# Test results and temporary logs
 *.log
 *.test
 *.tmp
 
-# 🧰 Editor specific files
+# Editor specific files
 *.swp
 *.swo
 
-# 🐍 Python-related files and folders
+# Python-related files and folders
 __pycache__/
 *.pyc
 *.pyo
@@ -32,18 +32,18 @@ __pycache__/
 .env
 venv/
 
-# 📚 Documentation and markdown backups
+# Documentation and markdown backups
 *.md~
 *.bk
 *.bak
 
-# 🔒 Backup files
+# Backup files
 *~
 *.bk
 *.bak
 *.old
 
-# 🧼 Junk files
+# Junk files
 .DS_Store
 Thumbs.db
 
