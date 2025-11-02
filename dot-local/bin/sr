@@ -18,6 +18,8 @@ declare -A sr_urls=(
   [4]="https://live1.sr.se/p4gbg-aac-320?latency=high"
   [5]="https://live1.sr.se/p4plus-aac-320?latency=high"
   [6]="https://live1.sr.se/ekotsanderdirekt-aac-192"
+  [7]="https://streaming.943.se/radio88"
+  [8]="https://streaming.943.se/radio88dans"
 )
 
 # Station names
@@ -28,6 +30,8 @@ declare -A sr_stations=(
   [4]="Sveriges Radio P4"
   [5]="Sveriges Radio P4 Plus"
   [6]="Ekot direkt!"
+  [7]="Radio 88"
+  [8]="Radio 88 Dans"
 )
 
 # --- Functions ---
@@ -101,7 +105,6 @@ play_station() {
 }
 
 # --- Main Logic ---
-
 main() {
   local pid_file="/tmp/radio-player.pid"
 
