@@ -1,5 +1,5 @@
  {
- "custom/startmenu" : {
+    "custom/startmenu" : {
         "format": "☰",
         "on-click": "walker --hideqa",
         "tooltip": false,
