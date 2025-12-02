@@ -45,7 +45,7 @@ current = weather['current_condition'][0]
 
 # Prepare output data structure
 data = {}
-tempint = int(current['FeelsLikeC'])
+tempint = int(current['temp_C'])
 
 # Display icon and temperature (with sign)
 data['text'] = f" <big>{WEATHER_CODES[current['weatherCode']]}</big> {tempint:+}°C"
